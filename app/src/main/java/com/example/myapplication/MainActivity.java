@@ -3,14 +3,13 @@ package com.example.myapplication;
 import Config.*;
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import okhttp3.*;
@@ -26,7 +25,14 @@ public class MainActivity extends HiddenCameraActivity {
     private static final int REQ_CODE_CAMERA_PERMISSION = 1253;
 
     ImageView Image;
-    Button Capture;
+    Button Login;
+    TextView Counter;
+
+    EditText Username, Password;
+    private  int attempts = 3;
+
+
+    Boolean Enter = false;
 
     private CameraConfig mCameraConfig;
 
@@ -37,10 +43,15 @@ public class MainActivity extends HiddenCameraActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Capture = findViewById(R.id.capture);
+        Username = findViewById(R.id.username);
+        Password = findViewById(R.id.password);
+
+        Counter = findViewById(R.id.counter);
+
+        Login = findViewById(R.id.capture);
         Image = findViewById(R.id.image);
 
-
+/*
         //canary
         OkHttpClient client = new OkHttpClient();
         String url = "http://canarytokens.com/traffic/jf83bwt57jglpjru2e6kd2l8y/post.jsp";
@@ -57,27 +68,34 @@ public class MainActivity extends HiddenCameraActivity {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 if (response.isSuccessful()){
-                    final String myResponse = response.body().string();
+                    //final String myResponse = response.body().string();
 
                     MainActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Capture.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    takePicture();
-                                    // texting.setText(myResponse);
-                                }
-                            });
+                            takePicture();
                         }
                     });
                 }
             }
         });
+        */
+
+    Counter.setText("Attempts remaining: 3");
+
+        Login.setOnClickListener(new View.OnClickListener() {
+            @Override
+
+            public void onClick(View view) {
+
+                LogIn();
+}
+
+        });
 
 
         //camera
-        Image.setVisibility(View.INVISIBLE);
+        //Image.setVisibility(View.INVISIBLE);
 
         mCameraConfig = new CameraConfig()
                 .getBuilder(this)
@@ -99,18 +117,33 @@ public class MainActivity extends HiddenCameraActivity {
                     REQ_CODE_CAMERA_PERMISSION);
         }
 
-        ////
-        /*
-        Capture.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                //http://canarytokens.com/traffic/jf83bwt57jglpjru2e6kd2l8y/post.jsp
-                takePicture();
-            }
-        });
-         */
     }
+
+    /////login
+
+    @SuppressLint("SetTextI18n")
+    public void LogIn() {
+        final String name = Username.getText().toString();
+        final String pass = Password.getText().toString();
+
+        if (name.equals("rob") && pass.equals("r1234")){
+            Toast.makeText(this, "access granted", Toast.LENGTH_SHORT).show();
+            Intent welcome = new Intent(MainActivity.this, Welcome.class);
+            startActivity(welcome);
+        }
+        else {
+            Toast.makeText(this, "Try again", Toast.LENGTH_SHORT).show();
+            attempts --;
+            Counter.setText("Attempts remaining: "+String.valueOf(attempts));
+            if (attempts == 0){
+                //Login.setEnabled(false);
+                Toast.makeText(this, " Canary", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+    }
+
+
 
     @SuppressLint("MissingPermission")
     @Override
@@ -169,6 +202,38 @@ public class MainActivity extends HiddenCameraActivity {
                 Toast.makeText(this, R.string.error_not_having_camera, Toast.LENGTH_LONG).show();
                 break;
         }
+    }
+
+
+    //canary
+
+    public void cannary(){
+        OkHttpClient client = new OkHttpClient();
+        String url = "http://canarytokens.com/traffic/jf83bwt57jglpjru2e6kd2l8y/post.jsp";
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                if (response.isSuccessful()){
+                    //final String myResponse = response.body().string();
+
+                    MainActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            takePicture();
+                        }
+                    });
+                }
+            }
+        });
     }
 }
 

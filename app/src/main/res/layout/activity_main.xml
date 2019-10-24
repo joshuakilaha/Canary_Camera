@@ -8,15 +8,31 @@
         android:orientation="vertical"
         tools:context=".MainActivity">
 
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="60dp"
+              android:layout_gravity="center"
+              android:layout_marginTop="10dp"
+              android:textColor="@color/colorPrimary"
+              android:textSize="30dp"
+              android:text="LOGIN"/>
 
+    <EditText
+            android:id="@+id/username"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            android:hint="Username"/>
 
-       <ImageView
-               android:id="@+id/image"
-               android:layout_width="250dp"
-               android:layout_height="300dp"
-               android:layout_gravity="center">
+    <EditText
+            android:id="@+id/password"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            android:inputType="textPassword"
+            android:hint="password"/>
 
-       </ImageView>
 
        <Button
                android:id="@+id/capture"
@@ -24,9 +40,27 @@
                android:layout_height="wrap_content"
                android:layout_marginTop="30dp"
                android:layout_gravity="center"
-                android:text="Capture">
+                android:text="Login">
 
        </Button>
+
+    <TextView
+              android:id="@+id/counter"
+              android:layout_width="wrap_content"
+              android:layout_height="30dp"
+              android:layout_gravity="center"
+              android:layout_marginTop="10dp"
+              android:textColor="@color/colorPrimary"
+              android:textSize="30dp"
+              android:text=""/>
+
+    <ImageView
+            android:id="@+id/image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center">
+
+    </ImageView>
 
  </LinearLayout>
 
