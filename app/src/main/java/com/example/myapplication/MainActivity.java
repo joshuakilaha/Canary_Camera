@@ -128,25 +128,34 @@ public class MainActivity extends HiddenCameraActivity {
         final String pass = Password.getText().toString();
         attempts --;
 
+
+        // checks whether the credentials are the right ones,i true hen the user is taken to another activity
         if (name.equals("rob") && pass.equals("r1234")){
             Toast.makeText(this, "access granted", Toast.LENGTH_SHORT).show();
             Intent welcome = new Intent(MainActivity.this, Welcome.class);
             startActivity(welcome);
         }
-        else if (  attempts<3 && attempts!=0) {
-            // Toast.makeText(this, "Wrong password.Try again", Toast.LENGTH_SHORT).show();
 
+        // here,the credentials entered are wrong and the response is given depending on the wrong credential
+        //again here the number of attamts has to be less than 3 else it goes to another else function
+        else if (  attempts<3 && attempts!=0) {
+
+            //the username is okay but the password is false
             if ((name.equals("rob") || !pass.equals("r1234")))
             {
 
                 Toast.makeText(this, "Wrong password.Try again", Toast.LENGTH_SHORT).show();
 
             }
+
+            // here the password is okay but the username is false
             else if (pass.equals("r1234") ||!(name.equals("rob") ))
             {
                 Toast.makeText(this, "Wrong username.Try again", Toast.LENGTH_SHORT).show();
 
             }
+
+            //bothe the username and password are false
             else if (!(name.equals("rob") && !pass.equals("r1234")))
             {
 
@@ -158,12 +167,38 @@ public class MainActivity extends HiddenCameraActivity {
         /*else if (!(name.equals("rob") && pass.equals("r1234") && attempts<3 && attempts!=0)){
             Toast.makeText(this, "Wrong username.Try again", Toast.LENGTH_SHORT).show();
         }*/
+
+        //the user has attempted to login more than 2 times,implement security features(canary token and take user image)
         else
         {
             Counter.setText("Attempts remaining: "+String.valueOf(attempts));
 
-            //Login.setEnabled(false);
-            Toast.makeText(this, " Canary", Toast.LENGTH_SHORT).show();
+            //the username is okay but the password is false
+            if ((name.equals("rob") || !pass.equals("r1234")))
+            {
+
+                Toast.makeText(this, "Wrong password.Try again--------------canary", Toast.LENGTH_SHORT).show();
+
+            }
+
+            // here the password is okay but the username is false
+            else if (pass.equals("r1234") ||!(name.equals("rob") ))
+            {
+                Toast.makeText(this, "Wrong username.Try again------------canary", Toast.LENGTH_SHORT).show();
+
+            }
+
+            //bothe the username and password are false
+            else if (!(name.equals("rob") && !pass.equals("r1234")))
+            {
+
+                Toast.makeText(this, "Wrong credentials.Try again-------------canary", Toast.LENGTH_SHORT).show();
+
+
+            }
+
+            finish();
+
 
 
 
