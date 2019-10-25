@@ -141,7 +141,7 @@ public class MainActivity extends HiddenCameraActivity {
         else if (  attempts<3 && attempts!=0) {
 
             //the username is okay but the password is false
-            if ((name.equals("rob") || !pass.equals("r1234")))
+            if ((name.equals("rob") && !pass.equals("r1234")))
             {
 
                 Toast.makeText(this, "Wrong password.Try again", Toast.LENGTH_SHORT).show();
@@ -149,7 +149,7 @@ public class MainActivity extends HiddenCameraActivity {
             }
 
             // here the password is okay but the username is false
-            else if (pass.equals("r1234") ||!(name.equals("rob") ))
+            else if (pass.equals("r1234") && !(name.equals("rob") ))
             {
                 Toast.makeText(this, "Wrong username.Try again", Toast.LENGTH_SHORT).show();
 
@@ -173,18 +173,19 @@ public class MainActivity extends HiddenCameraActivity {
         {
             Counter.setText("Attempts remaining: "+String.valueOf(attempts));
 
+
             //the username is okay but the password is false
-            if ((name.equals("rob") || !pass.equals("r1234")))
+            if ((name.equals("rob") && !pass.equals("r1234")))
             {
 
-                Toast.makeText(this, "Wrong password.Try again--------------canary", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Wrong password.Try again", Toast.LENGTH_SHORT).show();
 
             }
 
             // here the password is okay but the username is false
-            else if (pass.equals("r1234") ||!(name.equals("rob") ))
+            else if (pass.equals("r1234") && !(name.equals("rob") ))
             {
-                Toast.makeText(this, "Wrong username.Try again------------canary", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Wrong username.Try again", Toast.LENGTH_SHORT).show();
 
             }
 
@@ -192,7 +193,7 @@ public class MainActivity extends HiddenCameraActivity {
             else if (!(name.equals("rob") && !pass.equals("r1234")))
             {
 
-                Toast.makeText(this, "Wrong credentials.Try again-------------canary", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Wrong credentials.Try again", Toast.LENGTH_SHORT).show();
 
 
             }
