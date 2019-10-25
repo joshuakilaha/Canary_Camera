@@ -123,22 +123,50 @@ public class MainActivity extends HiddenCameraActivity {
 
     @SuppressLint("SetTextI18n")
     public void LogIn() {
+
         final String name = Username.getText().toString();
         final String pass = Password.getText().toString();
+        attempts --;
 
         if (name.equals("rob") && pass.equals("r1234")){
             Toast.makeText(this, "access granted", Toast.LENGTH_SHORT).show();
             Intent welcome = new Intent(MainActivity.this, Welcome.class);
             startActivity(welcome);
         }
-        else {
-            Toast.makeText(this, "Try again", Toast.LENGTH_SHORT).show();
-            attempts --;
-            Counter.setText("Attempts remaining: "+String.valueOf(attempts));
-            if (attempts == 0){
-                //Login.setEnabled(false);
-                Toast.makeText(this, " Canary", Toast.LENGTH_SHORT).show();
+        else if (  attempts<3 && attempts!=0) {
+            // Toast.makeText(this, "Wrong password.Try again", Toast.LENGTH_SHORT).show();
+
+            if ((name.equals("rob") || !pass.equals("r1234")))
+            {
+
+                Toast.makeText(this, "Wrong password.Try again", Toast.LENGTH_SHORT).show();
+
             }
+            else if (pass.equals("r1234") ||!(name.equals("rob") ))
+            {
+                Toast.makeText(this, "Wrong username.Try again", Toast.LENGTH_SHORT).show();
+
+            }
+            else if (!(name.equals("rob") && !pass.equals("r1234")))
+            {
+
+                Toast.makeText(this, "Wrong credentials.Try again", Toast.LENGTH_SHORT).show();
+
+
+            }
+        }
+        /*else if (!(name.equals("rob") && pass.equals("r1234") && attempts<3 && attempts!=0)){
+            Toast.makeText(this, "Wrong username.Try again", Toast.LENGTH_SHORT).show();
+        }*/
+        else
+        {
+            Counter.setText("Attempts remaining: "+String.valueOf(attempts));
+
+            //Login.setEnabled(false);
+            Toast.makeText(this, " Canary", Toast.LENGTH_SHORT).show();
+
+
+
         }
 
     }
