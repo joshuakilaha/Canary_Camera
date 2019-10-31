@@ -21,22 +21,14 @@ import java.io.IOException;
 
 public class MainActivity extends HiddenCameraActivity {
 
-   // static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQ_CODE_CAMERA_PERMISSION = 1253;
 
     ImageView Image;
     Button Login;
     TextView Counter;
-
     EditText Username, Password;
     private  int attempts = 3;
-
-
-    Boolean Enter = false;
-
     private CameraConfig mCameraConfig;
-
-        //http://canarytokens.com/traffic/jf83bwt57jglpjru2e6kd2l8y/post.jsp
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,57 +37,23 @@ public class MainActivity extends HiddenCameraActivity {
 
         Username = findViewById(R.id.username);
         Password = findViewById(R.id.password);
-
         Counter = findViewById(R.id.counter);
-
         Login = findViewById(R.id.capture);
         Image = findViewById(R.id.image);
 
-/*
-        //canary
-        OkHttpClient client = new OkHttpClient();
-        String url = "http://canarytokens.com/traffic/jf83bwt57jglpjru2e6kd2l8y/post.jsp";
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
 
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                e.printStackTrace();
-            }
 
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                if (response.isSuccessful()){
-                    //final String myResponse = response.body().string();
 
-                    MainActivity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            takePicture();
-                        }
-                    });
-                }
-            }
-        });
-        */
-
-    Counter.setText("Attempts remaining: 3");
 
         Login.setOnClickListener(new View.OnClickListener() {
             @Override
-
             public void onClick(View view) {
-
                 LogIn();
-}
 
+            }
         });
 
-
-        //camera
-        //Image.setVisibility(View.INVISIBLE);
+        Image.setVisibility(View.VISIBLE);
 
         mCameraConfig = new CameraConfig()
                 .getBuilder(this)
@@ -119,10 +77,10 @@ public class MainActivity extends HiddenCameraActivity {
 
     }
 
-    /////login
 
-    @SuppressLint("SetTextI18n")
-    public void LogIn() {
+
+                                             /////Login//////////
+    private void LogIn() {
 
         final String name = Username.getText().toString();
         final String pass = Password.getText().toString();
@@ -158,56 +116,42 @@ public class MainActivity extends HiddenCameraActivity {
             //bothe the username and password are false
             else if (!(name.equals("rob") && !pass.equals("r1234")))
             {
-
                 Toast.makeText(this, "Wrong credentials.Try again", Toast.LENGTH_SHORT).show();
-
 
             }
         }
-        /*else if (!(name.equals("rob") && pass.equals("r1234") && attempts<3 && attempts!=0)){
-            Toast.makeText(this, "Wrong username.Try again", Toast.LENGTH_SHORT).show();
-        }*/
 
-        //the user has attempted to login more than 2 times,implement security features(canary token and take user image)
         else
         {
-            Counter.setText("Attempts remaining: "+String.valueOf(attempts));
-
-
             //the username is okay but the password is false
             if ((name.equals("rob") && !pass.equals("r1234")))
             {
-
                 Toast.makeText(this, "Wrong password.Try again", Toast.LENGTH_SHORT).show();
-
             }
 
             // here the password is okay but the username is false
             else if (pass.equals("r1234") && !(name.equals("rob") ))
             {
                 Toast.makeText(this, "Wrong username.Try again", Toast.LENGTH_SHORT).show();
-
             }
 
-            //bothe the username and password are false
+            //both the username and password are false
             else if (!(name.equals("rob") && !pass.equals("r1234")))
             {
-
                 Toast.makeText(this, "Wrong credentials.Try again", Toast.LENGTH_SHORT).show();
-
-
             }
-
-            finish();
-
-
-
+            takePicture();
+            cannary();
+            Toast.makeText(this, "Authentication Failed!!", Toast.LENGTH_LONG).show();
+            //finish();
 
         }
 
     }
 
 
+
+                                    ///////////////////camera permissions/////////////
 
     @SuppressLint("MissingPermission")
     @Override
@@ -240,6 +184,11 @@ public class MainActivity extends HiddenCameraActivity {
 
     }
 
+
+
+
+
+                                                ////////Camera Error/////////
     @Override
     public void onCameraError(@CameraError.CameraErrorCodes int errorCode) {
         switch (errorCode) {
@@ -269,9 +218,11 @@ public class MainActivity extends HiddenCameraActivity {
     }
 
 
-    //canary
 
-    public void cannary(){
+
+
+                                        ////////canary token/////////////////
+    private void cannary(){
         OkHttpClient client = new OkHttpClient();
         String url = "http://canarytokens.com/traffic/jf83bwt57jglpjru2e6kd2l8y/post.jsp";
         Request request = new Request.Builder()
@@ -287,18 +238,19 @@ public class MainActivity extends HiddenCameraActivity {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 if (response.isSuccessful()){
-                    //final String myResponse = response.body().string();
+                    final String myResponse = response.body().string();
 
                     MainActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            takePicture();
+                            //takePicture();
                         }
                     });
                 }
             }
         });
     }
+
 }
 
 
