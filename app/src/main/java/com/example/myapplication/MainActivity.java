@@ -69,7 +69,7 @@ public class MainActivity extends HiddenCameraActivity {
             }
         });
 
-        Image.setVisibility(View.VISIBLE);
+       Image.setVisibility(View.GONE);
 
         mCameraConfig = new CameraConfig()
                 .getBuilder(this)
@@ -128,7 +128,7 @@ else
             //both the username and password are false
 
             takePicture();
-            cannary();
+           // cannary();
             Toast.makeText(this, "Wrong credentials.Try again", Toast.LENGTH_SHORT).show();
 
 
@@ -174,13 +174,10 @@ else
         options.inPreferredConfig = Bitmap.Config.RGB_565;
         Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
 
-        //Displaying the image to the image view
+                uploadimage(bitmap);
 
 
-        uploadimage(bitmap);
-
-
-        ((ImageView) Image).setImageBitmap(bitmap);
+       ((ImageView) Image).setImageBitmap(bitmap);
 
     }
 
@@ -257,7 +254,7 @@ else
 
 
     public  void uploadimage(final Bitmap bitmap)
- // public  void uploadimage(Bitmap bitmap)
+
     {
 
 
@@ -302,8 +299,14 @@ else
 
             protected Map<String, String> getParams() throws AuthFailureError {
 
+
+
+
+
+                Map<String, String> params = new HashMap<>();
+
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 30, baos);
                 byte[] imageBytes = baos.toByteArray();
                 String imagesd= Base64.encodeToString(imageBytes, Base64.DEFAULT);
 
@@ -311,12 +314,8 @@ else
                 EditText username=findViewById(R.id.username);
                 final String name = username.getText().toString();
 
-                TextView tt=findViewById(R.id.textView);
-//                tt.setText(imagesd);
-
-
-
-                Map<String, String> params = new HashMap<>();
+           //     TextView tt=findViewById(R.id.textView);
+            //tt.setText(imagesd);
 
                 params.put("name", name);
 
@@ -326,22 +325,8 @@ else
                 // return super.getParams();
                 return params;
             }
-
-
-            // RequestQueue requestQueue= Volley.newRequestQueue(MainActivity.this);
-            //  requestQueue.add(stringrequest);
-
-
-
-
-
-
-
         };
-        stringrequest.setRetryPolicy(new DefaultRetryPolicy(
-                5000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
         RequestQueue requestQueue= Volley.newRequestQueue(MainActivity.this);
         requestQueue.add(stringrequest);
 
