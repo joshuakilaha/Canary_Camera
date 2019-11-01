@@ -1,4 +1,6 @@
-import Config.CameraFacing;
+package Model;
+
+import Controler.CameraConfiguration.CameraFacing;
 import android.Manifest;
 import android.app.Service;
 import android.content.Context;
@@ -12,7 +14,6 @@ import android.view.WindowManager;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresPermission;
 import androidx.core.app.ActivityCompat;
-import com.example.myapplication.*;
 
 import java.io.File;
 

@@ -1,7 +1,7 @@
-package com.example.myapplication;
+package Model;
 
-import Config.CameraImageFormat;
-import Config.CameraRotation;
+import Controler.CameraConfiguration.CameraImageFormat;
+import Controler.CameraConfiguration.CameraRotation;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;

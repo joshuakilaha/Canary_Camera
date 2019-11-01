@@ -1,6 +1,6 @@
-package com.example.myapplication;
+package Model;
 
-import Config.CameraFacing;
+import Controler.CameraConfiguration.CameraFacing;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;

