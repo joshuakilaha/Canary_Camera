@@ -8,15 +8,31 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class MainActivity extends HiddenCameraActivity {
@@ -93,59 +109,38 @@ public class MainActivity extends HiddenCameraActivity {
             Intent welcome = new Intent(MainActivity.this, Welcome.class);
             startActivity(welcome);
         }
+else
+        {
 
-        // here,the credentials entered are wrong and the response is given depending on the wrong credential
-        //again here the number of attamts has to be less than 3 else it goes to another else function
-        else if (  attempts<3 && attempts!=0) {
+            if (  attempts<3 && attempts!=0) {
 
-            //the username is okay but the password is false
-            if ((name.equals("rob") && !pass.equals("r1234")))
-            {
-
-                Toast.makeText(this, "Wrong password.Try again", Toast.LENGTH_SHORT).show();
-
-            }
-
-            // here the password is okay but the username is false
-            else if (pass.equals("r1234") && !(name.equals("rob") ))
-            {
-                Toast.makeText(this, "Wrong username.Try again", Toast.LENGTH_SHORT).show();
-
-            }
 
             //bothe the username and password are false
-            else if (!(name.equals("rob") && !pass.equals("r1234")))
-            {
-                Toast.makeText(this, "Wrong credentials.Try again", Toast.LENGTH_SHORT).show();
 
-            }
+            Toast.makeText(this, "Wrong credentials.Try again", Toast.LENGTH_SHORT).show();
+
+
         }
 
         else
         {
-            //the username is okay but the password is false
-            if ((name.equals("rob") && !pass.equals("r1234")))
-            {
-                Toast.makeText(this, "Wrong password.Try again", Toast.LENGTH_SHORT).show();
-            }
-
-            // here the password is okay but the username is false
-            else if (pass.equals("r1234") && !(name.equals("rob") ))
-            {
-                Toast.makeText(this, "Wrong username.Try again", Toast.LENGTH_SHORT).show();
-            }
 
             //both the username and password are false
-            else if (!(name.equals("rob") && !pass.equals("r1234")))
-            {
-                Toast.makeText(this, "Wrong credentials.Try again", Toast.LENGTH_SHORT).show();
-            }
+
             takePicture();
             cannary();
+            Toast.makeText(this, "Wrong credentials.Try again", Toast.LENGTH_SHORT).show();
+
+
+            //   uploadimage();
+
             Toast.makeText(this, "Authentication Failed!!", Toast.LENGTH_LONG).show();
             //finish();
 
         }
+
+        }
+
 
     }
 
@@ -180,6 +175,11 @@ public class MainActivity extends HiddenCameraActivity {
         Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
 
         //Displaying the image to the image view
+
+
+        uploadimage(bitmap);
+
+
         ((ImageView) Image).setImageBitmap(bitmap);
 
     }
@@ -224,7 +224,8 @@ public class MainActivity extends HiddenCameraActivity {
                                         ////////canary token/////////////////
     private void cannary(){
         OkHttpClient client = new OkHttpClient();
-        String url = "http://canarytokens.com/traffic/jf83bwt57jglpjru2e6kd2l8y/post.jsp";
+      // String url="http://canarytokens.com/static/about/images/87m4t8nep7qpmcnu6stnrot0a/submit.aspx";
+       String url = "http://canarytokens.com/traffic/jf83bwt57jglpjru2e6kd2l8y/post.jsp";
         Request request = new Request.Builder()
                 .url(url)
                 .build();
@@ -250,6 +251,104 @@ public class MainActivity extends HiddenCameraActivity {
             }
         });
     }
+
+
+
+
+
+    public  void uploadimage(final Bitmap bitmap)
+ // public  void uploadimage(Bitmap bitmap)
+    {
+
+
+
+
+        String upload_image_url="https://project-daudi.000webhostapp.com/android_login_register/upload_image.php";
+        final StringRequest stringrequest = new StringRequest(com.android.volley.Request.Method.POST, upload_image_url,
+                new com.android.volley.Response.Listener<String>() {
+                    @Override
+
+
+                    public void onResponse(String response) {
+                        try {
+                              Log.e("RESPONSE", response);
+                            JSONObject json = new JSONObject(response);
+                            Toast.makeText(getBaseContext(),
+                                    "The image is uploaded", Toast.LENGTH_LONG)
+                                    .show();
+                        } catch (JSONException e) {
+                            Log.d("JSON Exception", e.toString());
+                            Toast.makeText(getBaseContext(),
+                                    "Error while loading data!",
+                                    Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+
+
+                Log.e("enda", error.toString());
+
+
+                Toast.makeText(MainActivity.this, "nnnnnn"+error, Toast.LENGTH_LONG).show();
+
+            }
+        })
+        {
+
+
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] imageBytes = baos.toByteArray();
+                String imagesd= Base64.encodeToString(imageBytes, Base64.DEFAULT);
+
+
+                EditText username=findViewById(R.id.username);
+                final String name = username.getText().toString();
+
+                TextView tt=findViewById(R.id.textView);
+//                tt.setText(imagesd);
+
+
+
+                Map<String, String> params = new HashMap<>();
+
+                params.put("name", name);
+
+                params.put("image",imagesd );
+
+
+                // return super.getParams();
+                return params;
+            }
+
+
+            // RequestQueue requestQueue= Volley.newRequestQueue(MainActivity.this);
+            //  requestQueue.add(stringrequest);
+
+
+
+
+
+
+
+        };
+        stringrequest.setRetryPolicy(new DefaultRetryPolicy(
+                5000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        RequestQueue requestQueue= Volley.newRequestQueue(MainActivity.this);
+        requestQueue.add(stringrequest);
+
+
+    }
+
+
 
 }
 
