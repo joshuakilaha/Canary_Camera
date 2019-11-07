@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package View;
 
 import Controler.CameraConfiguration.*;
 import Model.CameraConfig;
@@ -24,6 +24,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.myapplication.R;
 
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
@@ -130,7 +131,7 @@ else
             //both the username and password are false
 
             takePicture();
-           cannary();
+          cannary();
             Toast.makeText(this, "Wrong credentials.Try again", Toast.LENGTH_SHORT).show();
 
 
