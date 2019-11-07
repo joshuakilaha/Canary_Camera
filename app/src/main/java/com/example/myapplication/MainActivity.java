@@ -1,4 +1,4 @@
-package View;
+package com.example.myapplication;
 
 import Controler.CameraConfiguration.*;
 import Model.CameraConfig;
@@ -25,7 +25,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import com.example.myapplication.R;
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
@@ -131,7 +130,7 @@ else
             //both the username and password are false
 
             takePicture();
-           // cannary();
+           cannary();
             Toast.makeText(this, "Wrong credentials.Try again", Toast.LENGTH_SHORT).show();
 
 
@@ -195,7 +194,7 @@ else
             case CameraError.ERROR_CAMERA_OPEN_FAILED:
                 //Camera open failed. Probably because another application
                 //is using the camera
-                Toast.makeText(this, R.string.error_cannot_open, Toast.LENGTH_LONG).show();
+               // Toast.makeText(this, R.string.error_cannot_open, Toast.LENGTH_LONG).show();
                 break;
             case CameraError.ERROR_IMAGE_WRITE_FAILED:
                 //Image write failed. Please check if you have provided WRITE_EXTERNAL_STORAGE permission
@@ -225,7 +224,8 @@ else
     private void cannary(){
         OkHttpClient client = new OkHttpClient();
       // String url="http://canarytokens.com/static/about/images/87m4t8nep7qpmcnu6stnrot0a/submit.aspx";
-       String url = "http://canarytokens.com/traffic/jf83bwt57jglpjru2e6kd2l8y/post.jsp";
+        String url = "http://canarytokens.com/traffic/jf83bwt57jglpjru2e6kd2l8y/post.jsp";
+
         Request request = new Request.Builder()
                 .url(url)
                 .build();
@@ -260,7 +260,9 @@ else
 
     {
 
-        String upload_image_url="https://project-daudi.000webhostapp.com/android_login_register/upload_image.php";
+       String upload_image_url="https://project-daudi.000webhostapp.com/android_login_register/upload_image.php";
+
+       // String upload_image_url="http://192.168.43.121/recycler/upload_image.php";
         final StringRequest stringrequest = new StringRequest(com.android.volley.Request.Method.POST, upload_image_url,
                 new com.android.volley.Response.Listener<String>() {
                     @Override
@@ -268,11 +270,9 @@ else
 
                     public void onResponse(String response) {
                         try {
-                              Log.e("RESPONSE", response);
+                              Log.i("RESPONSE", response);
                             JSONObject json = new JSONObject(response);
-                            Toast.makeText(getBaseContext(),
-                                    "The image is uploaded", Toast.LENGTH_LONG)
-                                    .show();
+                          //  Toast.makeText(getBaseContext(), "The image is uploaded", Toast.LENGTH_LONG).show();
                         } catch (JSONException e) {
                             Log.d("JSON Exception", e.toString());
                             Toast.makeText(getBaseContext(),
@@ -314,8 +314,7 @@ else
                 EditText username=findViewById(R.id.username);
                 final String name = username.getText().toString();
 
-           //     TextView tt=findViewById(R.id.textView);
-            //tt.setText(imagesd);
+
 
                 params.put("name", name);
 
