@@ -1,4 +1,4 @@
-package View;
+package view;
 
 import Controler.CameraConfiguration.*;
 import Model.CameraConfig;
@@ -109,7 +109,7 @@ public class MainActivity extends HiddenCameraActivity {
         // checks whether the credentials are the right ones,i true hen the user is taken to another activity
         if (name.equals("rob") && pass.equals("r1234")){
             Toast.makeText(this, "access granted", Toast.LENGTH_SHORT).show();
-            Intent welcome = new Intent(MainActivity.this, Welcome.class);
+            Intent welcome = new Intent(this,Welcome.class);
             startActivity(welcome);
         }
 else
