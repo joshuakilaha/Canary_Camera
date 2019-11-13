@@ -71,8 +71,6 @@ public class LoginScreen extends HiddenCameraActivity {
         Login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent toMainActivity = new Intent(LoginScreen.this, Welcome.class);
-                startActivity(toMainActivity);
                 LogIn();
             }
         });
