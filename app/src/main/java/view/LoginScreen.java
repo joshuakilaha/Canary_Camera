@@ -11,21 +11,20 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
 import androidx.core.app.ActivityCompat;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.myapplication.R;
-
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
@@ -37,40 +36,50 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-
-public class MainActivity extends HiddenCameraActivity {
+public class LoginScreen extends HiddenCameraActivity {
 
     private static final int REQ_CODE_CAMERA_PERMISSION = 1253;
 
-    ImageView Image;
+    TextView SignUp;
     Button Login;
-    TextView Counter;
-    EditText Username, Password;
+    EditText Email,Password;
+    ImageView Image;
+
     private  int attempts = 3;
     private CameraConfig mCameraConfig;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login_screen);
 
-        Username = findViewById(R.id.username);
-        Password = findViewById(R.id.password);
-        Counter = findViewById(R.id.counter);
-        Login = findViewById(R.id.capture);
+        Email = findViewById(R.id.Email);
+        Password = findViewById(R.id.PassWord);
         Image = findViewById(R.id.image);
+        SignUp = findViewById(R.id.signUp_tv);
+        Login = findViewById(R.id.login_loginScreen);
 
+       // Image.setVisibility(View.GONE);
 
+        SignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent toSignUp = new Intent(LoginScreen.this, view.SignUp.class);
+                startActivity(toSignUp);
+            }
+        });
 
         Login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent toMainActivity = new Intent(LoginScreen.this, Welcome.class);
+                startActivity(toMainActivity);
                 LogIn();
-
             }
         });
 
-       Image.setVisibility(View.GONE);
+
+                            //Calling Camera Config class
 
         mCameraConfig = new CameraConfig()
                 .getBuilder(this)
@@ -92,53 +101,56 @@ public class MainActivity extends HiddenCameraActivity {
                     REQ_CODE_CAMERA_PERMISSION);
         }
 
+
     }
 
 
 
-                                             /////Login//////////
+
+    /////Login//////////
     private void LogIn() {
 
-        final String name = Username.getText().toString();
+        final String email = Email.getText().toString();
         final String pass = Password.getText().toString();
         attempts --;
 
 
+
         // checks whether the credentials are the right ones,i true hen the user is taken to another activity
-        if (name.equals("rob") && pass.equals("r1234")){
+        if (email.equals("rob") && pass.equals("r1234")){
             Toast.makeText(this, "access granted", Toast.LENGTH_SHORT).show();
             Intent welcome = new Intent(this,Welcome.class);
             startActivity(welcome);
         }
-else
+        else
         {
 
             if (  attempts<3 && attempts!=0) {
 
 
-            //bothe the username and password are false
+                //bothe the username and password are false
 
-            Toast.makeText(this, "Wrong credentials.Try again", Toast.LENGTH_SHORT).show();
-
-
-        }
-
-        else
-        {
-
-            //both the username and password are false
-
-            takePicture();
-          cannary();
-            Toast.makeText(this, "Wrong credentials.Try again", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Wrong credentials.Try again", Toast.LENGTH_SHORT).show();
 
 
-            //   uploadimage();
+            }
 
-            Toast.makeText(this, "Authentication Failed!!", Toast.LENGTH_LONG).show();
-            //finish();
+            else
+            {
 
-        }
+                //both the username and password are false
+
+                takePicture();
+                cannary();
+                Toast.makeText(this, "Wrong credentials.Try again", Toast.LENGTH_SHORT).show();
+
+
+                //   uploadimage();
+
+                Toast.makeText(this, "Authentication Failed!!", Toast.LENGTH_LONG).show();
+                //finish();
+
+            }
 
         }
 
@@ -147,7 +159,7 @@ else
 
 
 
-                                    ///////////////////camera permissions/////////////
+    ///////////////////camera permissions/////////////
 
     @SuppressLint("MissingPermission")
     @Override
@@ -175,10 +187,10 @@ else
         options.inPreferredConfig = Bitmap.Config.RGB_565;
         Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
 
-                uploadimage(bitmap);
+        uploadimage(bitmap);
 
 
-       ((ImageView) Image).setImageBitmap(bitmap);
+        ((ImageView) Image).setImageBitmap(bitmap);
 
     }
 
@@ -186,14 +198,14 @@ else
 
 
 
-                                                ////////Camera Error/////////
+    ////////Camera Error/////////
     @Override
     public void onCameraError(@CameraError.CameraErrorCodes int errorCode) {
         switch (errorCode) {
             case CameraError.ERROR_CAMERA_OPEN_FAILED:
                 //Camera open failed. Probably because another application
                 //is using the camera
-               // Toast.makeText(this, R.string.error_cannot_open, Toast.LENGTH_LONG).show();
+                // Toast.makeText(this, R.string.error_cannot_open, Toast.LENGTH_LONG).show();
                 break;
             case CameraError.ERROR_IMAGE_WRITE_FAILED:
                 //Image write failed. Please check if you have provided WRITE_EXTERNAL_STORAGE permission
@@ -219,10 +231,10 @@ else
 
 
 
-                                        ////////canary token/////////////////
+    ////////canary token/////////////////
     private void cannary(){
         OkHttpClient client = new OkHttpClient();
-      // String url="http://canarytokens.com/static/about/images/87m4t8nep7qpmcnu6stnrot0a/submit.aspx";
+        // String url="http://canarytokens.com/static/about/images/87m4t8nep7qpmcnu6stnrot0a/submit.aspx";
         String url = "http://canarytokens.com/traffic/jf83bwt57jglpjru2e6kd2l8y/post.jsp";
 
         Request request = new Request.Builder()
@@ -240,7 +252,7 @@ else
                 if (response.isSuccessful()){
                     final String myResponse = response.body().string();
 
-                    MainActivity.this.runOnUiThread(new Runnable() {
+                    LoginScreen.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             //takePicture();
@@ -253,15 +265,15 @@ else
 
 
 
-                                                /////////Image to server
+    /////////Image to server
 
     public  void uploadimage(final Bitmap bitmap)
 
     {
 
-       String upload_image_url="https://project-daudi.000webhostapp.com/android_login_register/upload_image.php";
+        String upload_image_url="https://project-daudi.000webhostapp.com/android_login_register/upload_image.php";
 
-       // String upload_image_url="http://192.168.43.121/recycler/upload_image.php";
+        // String upload_image_url="http://192.168.43.121/recycler/upload_image.php";
         final StringRequest stringrequest = new StringRequest(com.android.volley.Request.Method.POST, upload_image_url,
                 new com.android.volley.Response.Listener<String>() {
                     @Override
@@ -269,9 +281,9 @@ else
 
                     public void onResponse(String response) {
                         try {
-                              Log.i("RESPONSE", response);
+                            Log.i("RESPONSE", response);
                             JSONObject json = new JSONObject(response);
-                          //  Toast.makeText(getBaseContext(), "The image is uploaded", Toast.LENGTH_LONG).show();
+                            //  Toast.makeText(getBaseContext(), "The image is uploaded", Toast.LENGTH_LONG).show();
                         } catch (JSONException e) {
                             Log.d("JSON Exception", e.toString());
                             Toast.makeText(getBaseContext(),
@@ -289,7 +301,7 @@ else
                 Log.e("enda", error.toString());
 
 
-                Toast.makeText(MainActivity.this, "nnnnnn"+error, Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginScreen.this, "nnnnnn"+error, Toast.LENGTH_LONG).show();
 
             }
         })
@@ -325,16 +337,11 @@ else
             }
         };
 
-        RequestQueue requestQueue= Volley.newRequestQueue(MainActivity.this);
+        RequestQueue requestQueue= Volley.newRequestQueue(LoginScreen.this);
         requestQueue.add(stringrequest);
 
 
     }
 
 
-
 }
-
-
-
-

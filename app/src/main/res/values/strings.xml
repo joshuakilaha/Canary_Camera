@@ -1,62 +1,30 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">My Wallet</string>
     <string name="error_cannot_write">Cannot write image captured by camera.</string>
     <string name="error_cannot_open">Cannot open camera.</string>
     <string name="error_cannot_get_permission">Camera permission not available.</string>
     <string name="error_not_having_camera">Your device does not have front camera.</string>
     <string name="error_camera_permission_denied">Camera permission denied.</string>
     <string name="btn_tittle_capture_image">Capture image</string>
-    <string name="image_encoded">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</string>
+
+
+    <string name="Title">
+        <b>My Wallet</b>
+    </string>
+    <string name="Description">Life just got more easier</string>
+    <string name="login">
+        <i>Login</i>
+    </string>
+    <string name="Signup">
+        <i>SignUp</i>
+    </string>
+    <string name="Forgot">
+        <u>Forgot Password?</u>
+    </string>
+    <string name="Account">Don\'t have an account?</string>
+    <string name="Terms">By signing up you accept the Terms of Service and Privacy Policy</string>
+    <string name="Terms_of_Service">Terms of Service</string>
+    <string name="Policy">Privacy Policy</string>
+
+
 </resources>
