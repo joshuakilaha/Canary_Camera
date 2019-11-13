@@ -1,6 +1,6 @@
 package view;
 
-import Controler.CameraConfiguration.*;
+import Controler.*;
 import Model.CameraConfig;
 import Model.CameraError;
 import Model.HiddenCameraActivity;
@@ -16,7 +16,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.*;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.core.app.ActivityCompat;
 import com.android.volley.AuthFailureError;
@@ -24,7 +23,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.myapplication.R;
+import com.example.myapplication.*;
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;

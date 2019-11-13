@@ -1,6 +1,6 @@
 package Model;
 
-import Controler.CameraConfiguration.*;
+import Controler.*;
 import android.content.Context;
 import android.hardware.Camera;
 import androidx.annotation.NonNull;

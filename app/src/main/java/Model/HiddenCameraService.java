@@ -1,6 +1,6 @@
 package Model;
 
-import Controler.CameraConfiguration.CameraFacing;
+import Controler.CameraFacing;
 import android.Manifest;
 import android.app.Service;
 import android.content.Context;

@@ -1,6 +1,6 @@
 package view;
 
-import Controler.CameraConfiguration.*;
+import Controler.*;
 import Model.CameraConfig;
 import Model.CameraError;
 import Model.HiddenCameraActivity;
@@ -24,7 +24,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.myapplication.R;
+import com.example.myapplication.*;
 
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;

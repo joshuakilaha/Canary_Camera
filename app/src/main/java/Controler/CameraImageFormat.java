@@ -1,4 +1,4 @@
-package Controler.CameraConfiguration;
+package Controler;
 
 import androidx.annotation.IntDef;
 
