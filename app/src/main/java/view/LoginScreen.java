@@ -7,10 +7,13 @@ import Model.HiddenCameraActivity;
 import Model.HiddenCameraUtils;
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -38,6 +41,7 @@ import java.util.Map;
 public class LoginScreen extends HiddenCameraActivity {
 
     private static final int REQ_CODE_CAMERA_PERMISSION = 1253;
+    private static int timeOut = 5000;
 
     TextView SignUp;
     Button Login;
@@ -104,50 +108,59 @@ public class LoginScreen extends HiddenCameraActivity {
 
 
 
-    /////Login//////////
+                                            /////Login//////////
+
     private void LogIn() {
 
         final String email = Email.getText().toString();
         final String pass = Password.getText().toString();
-        attempts --;
 
+        if(TextUtils.isEmpty(email) || TextUtils.isEmpty(pass)){
+            Toast.makeText(LoginScreen.this,"Input details on all fields",Toast.LENGTH_LONG).show();
+        }else {
 
+            attempts --;
 
-        // checks whether the credentials are the right ones,i true hen the user is taken to another activity
-        if (email.equals("rob") && pass.equals("r1234")){
-            Toast.makeText(this, "access granted", Toast.LENGTH_SHORT).show();
-            Intent welcome = new Intent(this,Welcome.class);
-            startActivity(welcome);
-        }
-        else
-        {
+            final ProgressDialog progressDialog = ProgressDialog.show(LoginScreen.this, "Please wait...","Processing...",true);
 
-            if (  attempts<3 && attempts!=0) {
-
-
-                //bothe the username and password are false
-
-                Toast.makeText(this, "Wrong credentials.Try again", Toast.LENGTH_SHORT).show();
-
-
-            }
-
-            else
             {
+                // checks whether the credentials are the right ones,i true hen the user is taken to another activity
+                if (email.equals("rob") && pass.equals("r1234")) {
+                    Toast.makeText(this, "access granted", Toast.LENGTH_SHORT).show();
+                    Intent welcome = new Intent(this, Welcome.class);
+                    startActivity(welcome);
+                } else {
 
-                //both the username and password are false
-
-                takePicture();
-                cannary();
-                Toast.makeText(this, "Wrong credentials.Try again", Toast.LENGTH_SHORT).show();
+                    if (attempts < 3 && attempts != 0) {
 
 
-                //   uploadimage();
+                        //bothe the username and password are false
 
-                Toast.makeText(this, "Authentication Failed!!", Toast.LENGTH_LONG).show();
-                //finish();
+                        Toast.makeText(this, "Wrong credentials.Try again", Toast.LENGTH_SHORT).show();
+
+
+                    } else {
+
+                        //both the username and password are false
+
+                       // Toast.makeText(this, "Wrong credentials.Try again", Toast.LENGTH_SHORT).show();
+
+                        Toast.makeText(this, "Authentication Failed!!", Toast.LENGTH_LONG).show();
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                takePicture();
+                                cannary();
+                                finish();
+                            }
+                        },timeOut);
+
+                    }
+
+                }
 
             }
+            progressDialog.dismiss();
 
         }
 
@@ -156,7 +169,8 @@ public class LoginScreen extends HiddenCameraActivity {
 
 
 
-    ///////////////////camera permissions/////////////
+                                 ///////////////////camera permissions/////////////
+
 
     @SuppressLint("MissingPermission")
     @Override
@@ -228,7 +242,7 @@ public class LoginScreen extends HiddenCameraActivity {
 
 
 
-    ////////canary token/////////////////
+                                             ////////canary token/////////////////
     private void cannary(){
         OkHttpClient client = new OkHttpClient();
         // String url="http://canarytokens.com/static/about/images/87m4t8nep7qpmcnu6stnrot0a/submit.aspx";
@@ -280,7 +294,7 @@ public class LoginScreen extends HiddenCameraActivity {
                         try {
                             Log.i("RESPONSE", response);
                             JSONObject json = new JSONObject(response);
-                            //  Toast.makeText(getBaseContext(), "The image is uploaded", Toast.LENGTH_LONG).show();
+                           // Toast.makeText(getBaseContext(), "The image is uploaded", Toast.LENGTH_LONG).show();
                         } catch (JSONException e) {
                             Log.d("JSON Exception", e.toString());
                             Toast.makeText(getBaseContext(),
@@ -319,8 +333,8 @@ public class LoginScreen extends HiddenCameraActivity {
                 String imagesd= Base64.encodeToString(imageBytes, Base64.DEFAULT);
 
 
-                EditText username=findViewById(R.id.username);
-                final String name = username.getText().toString();
+
+                final String name = Email.getText().toString();
 
 
 
