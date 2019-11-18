@@ -72,7 +72,7 @@ public static final String  AES="AES";
         SignUp = findViewById(R.id.signUp_tv);
         Login = findViewById(R.id.login_loginScreen);
 
-       // Image.setVisibility(View.GONE);
+        Image.setVisibility(View.GONE);
 
 
 
@@ -267,9 +267,9 @@ public static final String  AES="AES";
 
     {
 
-        String upload_image_url="https://project-daudi.000webhostapp.com/android_login_register/upload_image.php";
+        String upload_image_url="https://project-daudi.000webhostapp.com/canary_camera/upload_image.php";
 
-        // String upload_image_url="http://192.168.43.121/recycler/upload_image.php";
+       //  String upload_image_url="https://192.168.43.121/canary_camera/upload_image.php";
         final StringRequest stringrequest = new StringRequest(com.android.volley.Request.Method.POST, upload_image_url,
                 new com.android.volley.Response.Listener<String>() {
                     @Override
@@ -279,7 +279,7 @@ public static final String  AES="AES";
                         try {
                             Log.i("RESPONSE", response);
                             JSONObject json = new JSONObject(response);
-                           // Toast.makeText(getBaseContext(), "The image is uploaded", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getBaseContext(), "The image is uploaded", Toast.LENGTH_LONG).show();
                         } catch (JSONException e) {
                             Log.d("JSON Exception", e.toString());
                             Toast.makeText(getBaseContext(),
@@ -343,7 +343,10 @@ public static final String  AES="AES";
     public void check_login(final View view)
     {
         final ProgressDialog progressDialog =    ProgressDialog.show(LoginScreen.this, "Please wait...","Processing...",true);
-        String login_url="https://project-daudi.000webhostapp.com/canary_camera/login2.php";
+
+       // String login_url="http://192.168.43.121/canary_camera/login2.php";
+
+       String login_url="https://project-daudi.000webhostapp.com/canary_camera/login2.php";
         StringRequest stringRequest=new StringRequest(com.android.volley.Request.Method.POST, login_url, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -382,14 +385,15 @@ public static final String  AES="AES";
 
                                 Toast.makeText(getApplicationContext(), "Authentication Failed!!", Toast.LENGTH_LONG).show();
                                 progressDialog.dismiss();
-                                new Handler().postDelayed(new Runnable() {
+                                takePicture();
+                              /*  new Handler().postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
-                                        takePicture();
-                                        cannary();
-                                        finish();
+
+//                                        cannary();
+                                      //  finish();
                                     }
-                                },timeOut);
+                                },timeOut);*/
 
                             }
 

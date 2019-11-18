@@ -112,7 +112,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="30dp"
-                android:textColor="@color/blueDodger"
+                android:textColor="@color/primaryColor"
                 android:text="@string/Forgot"/>
 
         <LinearLayout
@@ -131,7 +131,7 @@
                     android:id="@+id/signUp_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/blueDodger"
+                    android:textColor="@color/primaryColor"
                     android:text="@string/Signup"/>
         </LinearLayout>
 

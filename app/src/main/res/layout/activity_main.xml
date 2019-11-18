@@ -12,7 +12,7 @@
               android:layout_height="60dp"
               android:layout_gravity="center"
               android:layout_marginTop="10dp"
-              android:textColor="@color/colorPrimary"
+              android:textColor="@color/primaryColor"
               android:textSize="30dp"
               android:text="LOGIN"/>
 
@@ -53,7 +53,7 @@
               android:layout_height="30dp"
               android:layout_gravity="center"
               android:layout_marginTop="10dp"
-              android:textColor="@color/colorPrimary"
+              android:textColor="@color/primaryColor"
               android:textSize="30dp"
               android:text=""/>
 

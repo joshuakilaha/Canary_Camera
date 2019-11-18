@@ -113,7 +113,7 @@ signup.setVisibility(View.GONE);
     private  void  register(final String FirstName, final String LastName, final String Email, final String Mobile_no, final String Password )
     {
 
-        //String url="https://192.168.43.121/canary_camera/register.php";
+     //   String url="http://192.168.43.121/canary_camera/register.php";
 
         String url="https://project-daudi.000webhostapp.com/canary_camera/register.php";
 
