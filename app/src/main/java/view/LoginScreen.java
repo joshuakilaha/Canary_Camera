@@ -23,11 +23,18 @@ import androidx.annotation.NonNull;
 import android.os.Bundle;
 import androidx.core.app.ActivityCompat;
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.RequestQueue;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.myapplication.*;
+import com.google.android.material.snackbar.Snackbar;
+
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
@@ -52,6 +59,7 @@ public class LoginScreen extends HiddenCameraActivity {
     private  int attempts = 3;
     private CameraConfig mCameraConfig;
 public static final String  AES="AES";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +77,6 @@ public static final String  AES="AES";
 
 
 
-
         SignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -82,7 +89,7 @@ public static final String  AES="AES";
             @Override
             public void onClick(View view) {
                 try {
-                    LogIn();
+                    LogIn(view);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -120,7 +127,7 @@ public static final String  AES="AES";
 
                                             /////Login//////////
 
-    private void LogIn() throws Exception {
+    private void LogIn(View view) throws Exception {
 
 
 
@@ -137,7 +144,7 @@ public static final String  AES="AES";
             Toast.makeText(LoginScreen.this,"Input details on all fields",Toast.LENGTH_LONG).show();
         }else {
 
-         check_login();
+         check_login(view);
 
 
         }
@@ -333,10 +340,9 @@ public static final String  AES="AES";
     }
 
 
-    public void check_login()
+    public void check_login(final View view)
     {
-        final ProgressDialog progressDialog = ProgressDialog.show(LoginScreen.this, "Please wait...","Processing...",true);
-        //final String responses = "";
+        final ProgressDialog progressDialog =    ProgressDialog.show(LoginScreen.this, "Please wait...","Processing...",true);
         String login_url="https://project-daudi.000webhostapp.com/canary_camera/login2.php";
         StringRequest stringRequest=new StringRequest(com.android.volley.Request.Method.POST, login_url, new com.android.volley.Response.Listener<String>() {
             @Override
@@ -396,6 +402,8 @@ public static final String  AES="AES";
                     e.printStackTrace();
                  //   responses.equals(login_response);
                     Log.i("JSONEXCEPTION", e.toString());
+                    progressDialog.dismiss();
+
                 }
 
 
@@ -406,7 +414,26 @@ public static final String  AES="AES";
 
                 Log.i("volleyError",error.toString());
 
-            }
+
+                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                    snackbar(error.toString(),view);
+                       progressDialog.dismiss();
+                    //This indicates that the reuest has either time out or there is no connection
+                } else if (error instanceof AuthFailureError) {
+                    snackbar(error.toString(),view);
+                    progressDialog.dismiss();
+                } else if (error instanceof ServerError) {
+                    snackbar(error.toString(),view);
+                    progressDialog.dismiss();
+                } else if (error instanceof NetworkError) {
+                    snackbar(error.toString(),view);
+                    progressDialog.dismiss();                }
+                else if (error instanceof ParseError) {
+                    snackbar(error.toString(),view);
+                    progressDialog.dismiss();                }
+
+
+           }
         })
 
 
@@ -438,7 +465,11 @@ public static final String  AES="AES";
 
     }
 
-
+public void  snackbar(String error,View view)
+    {
+Snackbar mysnackbar=Snackbar.make(view,error,Snackbar.LENGTH_LONG);
+    mysnackbar.show();
+    }
 
 
 

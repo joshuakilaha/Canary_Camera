@@ -65,9 +65,10 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:textAlignment="center"
+
                 android:background="@drawable/edittexts"
-                android:inputType="textEmailAddress"
-                android:hint="Email"/>
+android:inputType="textEmailAddress"
+            android:hint="Email"/>
 
       <LinearLayout
           android:layout_width="300dp"
@@ -99,6 +100,7 @@ android:id="@+id/country_code"
                   android:layout_width="wrap_content"
                   android:layout_height="match_parent"
                   android:layout_gravity="center"
+                  android:inputType="number"
                   android:hint="700000000"/>
 
 
@@ -108,27 +110,51 @@ android:id="@+id/country_code"
 
       </LinearLayout>
 
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            app:passwordToggleEnabled="true">
+
+
         <EditText
                 android:id="@+id/passWord"
                 android:layout_width="300dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
+            android:gravity="center"
                 android:layout_marginTop="10dp"
                 android:textAlignment="center"
                 android:background="@drawable/edittexts"
                 android:inputType="textPassword"
                 android:hint="Password"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <EditText
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            app:passwordToggleEnabled="true">
+
+
+            <EditText
                 android:id="@+id/confirmPassword"
                 android:layout_width="300dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:textAlignment="center"
+                android:gravity="center"
                 android:background="@drawable/edittexts"
                 android:inputType="textPassword"
                 android:hint="Confirm Password"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+
     </LinearLayout>
 
 
