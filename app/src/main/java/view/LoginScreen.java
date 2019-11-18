@@ -13,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
@@ -45,24 +46,29 @@ public class LoginScreen extends HiddenCameraActivity {
 
     TextView SignUp;
     Button Login;
-    EditText Email,Password;
+    EditText Username,Password;
     ImageView Image;
 
     private  int attempts = 3;
     private CameraConfig mCameraConfig;
-
+public static final String  AES="AES";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
 
-        Email = findViewById(R.id.Email);
+
+        Username = findViewById(R.id.Email);
         Password = findViewById(R.id.PassWord);
         Image = findViewById(R.id.image);
         SignUp = findViewById(R.id.signUp_tv);
         Login = findViewById(R.id.login_loginScreen);
 
        // Image.setVisibility(View.GONE);
+
+
+
+
 
         SignUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,7 +81,11 @@ public class LoginScreen extends HiddenCameraActivity {
         Login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LogIn();
+                try {
+                    LogIn();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -110,57 +120,25 @@ public class LoginScreen extends HiddenCameraActivity {
 
                                             /////Login//////////
 
-    private void LogIn() {
+    private void LogIn() throws Exception {
 
-        final String email = Email.getText().toString();
+
+
+
+        final String email = Username.getText().toString();
         final String pass = Password.getText().toString();
+
+       // Encrypt encrypt=new Encrypt();
+
+       // final  String pass_value=encrypt.encrypt(email,pass);
+
 
         if(TextUtils.isEmpty(email) || TextUtils.isEmpty(pass)){
             Toast.makeText(LoginScreen.this,"Input details on all fields",Toast.LENGTH_LONG).show();
         }else {
 
-            attempts --;
+         check_login();
 
-            final ProgressDialog progressDialog = ProgressDialog.show(LoginScreen.this, "Please wait...","Processing...",true);
-
-            {
-                // checks whether the credentials are the right ones,i true hen the user is taken to another activity
-                if (email.equals("rob") && pass.equals("r1234")) {
-                    Toast.makeText(this, "access granted", Toast.LENGTH_SHORT).show();
-                    Intent welcome = new Intent(this, Welcome.class);
-                    startActivity(welcome);
-                } else {
-
-                    if (attempts < 3 && attempts != 0) {
-
-
-                        //bothe the username and password are false
-
-                        Toast.makeText(this, "Wrong credentials.Try again", Toast.LENGTH_SHORT).show();
-
-
-                    } else {
-
-                        //both the username and password are false
-
-                       // Toast.makeText(this, "Wrong credentials.Try again", Toast.LENGTH_SHORT).show();
-
-                        Toast.makeText(this, "Authentication Failed!!", Toast.LENGTH_LONG).show();
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                takePicture();
-                                cannary();
-                                finish();
-                            }
-                        },timeOut);
-
-                    }
-
-                }
-
-            }
-            progressDialog.dismiss();
 
         }
 
@@ -316,10 +294,10 @@ public class LoginScreen extends HiddenCameraActivity {
 
             }
         })
+
+
         {
-
-
-            protected Map<String, String> getParams() throws AuthFailureError {
+              protected Map<String, String> getParams() throws AuthFailureError {
 
 
 
@@ -334,7 +312,7 @@ public class LoginScreen extends HiddenCameraActivity {
 
 
 
-                final String name = Email.getText().toString();
+                final String name = Username.getText().toString();
 
 
 
@@ -353,6 +331,115 @@ public class LoginScreen extends HiddenCameraActivity {
 
 
     }
+
+
+    public void check_login()
+    {
+        final ProgressDialog progressDialog = ProgressDialog.show(LoginScreen.this, "Please wait...","Processing...",true);
+        //final String responses = "";
+        String login_url="https://project-daudi.000webhostapp.com/canary_camera/login2.php";
+        StringRequest stringRequest=new StringRequest(com.android.volley.Request.Method.POST, login_url, new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.i("Response", response.toString());
+
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    String     login_response = jsonObject.getString("response");
+
+                    attempts --;
+
+                    {
+                        // checks whether the credentials are the right ones,i true hen the user is taken to another activity
+                        if (login_response.equals("successful")) {
+                            progressDialog.dismiss();
+
+                            Toast.makeText(getApplicationContext(), "access granted", Toast.LENGTH_SHORT).show();
+                            Intent welcome = new Intent(getApplicationContext(), Welcome.class);
+                            startActivity(welcome);
+                        } else {
+
+                            if (attempts < 3 && attempts != 0) {
+
+
+                                //bothe the username and password are false
+
+                                Toast.makeText(getApplicationContext(), "Wrong credentials.Try again", Toast.LENGTH_SHORT).show();
+
+                                progressDialog.dismiss();
+                            } else {
+
+                                //both the username and password are false
+
+                                // Toast.makeText(this, "Wrong credentials.Try again", Toast.LENGTH_SHORT).show();
+
+                                Toast.makeText(getApplicationContext(), "Authentication Failed!!", Toast.LENGTH_LONG).show();
+                                progressDialog.dismiss();
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        takePicture();
+                                        cannary();
+                                        finish();
+                                    }
+                                },timeOut);
+
+                            }
+
+                        }
+
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                 //   responses.equals(login_response);
+                    Log.i("JSONEXCEPTION", e.toString());
+                }
+
+
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Log.i("volleyError",error.toString());
+
+            }
+        })
+
+
+        {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> params=new HashMap<>();
+
+                final Encrypt encrypt=new Encrypt();
+
+
+                params.put("username","+254"+Username.getText().toString());
+                try {
+                    params.put("encrypted_password",encrypt.encrypt(Username.getText().toString(),Password.getText().toString()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return  params;
+            }
+
+
+        };
+
+        final RequestQueue requestQueue=Volley.newRequestQueue(getApplicationContext());
+        requestQueue.add(stringRequest);
+
+
+
+
+    }
+
+
+
 
 
 }

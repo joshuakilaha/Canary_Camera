@@ -4,14 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+android:gravity="center"
+    android:layout_gravity="center"
     android:background="@color/ui_color"
     android:orientation="vertical"
     tools:context="view.Transactions">
 
 
-
-
-
-
+    <TextView
+        android:id="@+id/textView3"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="TextView" />
 </LinearLayout>
