@@ -6,6 +6,9 @@
     <string name="error_not_having_camera">Your device does not have front camera.</string>
     <string name="error_camera_permission_denied">Camera permission denied.</string>
     <string name="btn_tittle_capture_image">Capture image</string>
+    <string name="volley_url">project-daudi.000webhostapp.com/canary_camera/</string>
+
+    <string name="localhost_url">192.168.43.121/canary_camera/</string>
 
 
     <string name="Title">

@@ -18,9 +18,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name="view.Welcome"/>
-        <activity android:name="view.SignUp"/>
-
+        <activity android:name="view.Unauthorized_list"></activity>
+        <activity android:name="view.MyAccount" />
+        <activity android:name="view.Welcome" />
+        <activity android:name="view.SignUp" />
         <activity android:name="view.Transactions" />
         <activity android:name="view.LoginScreen">
             <intent-filter>

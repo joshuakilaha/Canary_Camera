@@ -21,7 +21,7 @@ public class Encrypt {
 
 
 
-    public   String encrypt(String username,String password) throws Exception {
+    public   String encrypt(String password) throws Exception {
         SecretKeySpec key=generateKey(password);
         Cipher c=Cipher.getInstance(AES);
         c.init(Cipher.ENCRYPT_MODE,key);
@@ -29,7 +29,7 @@ public class Encrypt {
 
         byte [] encvalue= new byte[0];
         try {
-            encvalue = c.doFinal(username.getBytes());
+            encvalue = c.doFinal(password.getBytes());
         } catch (BadPaddingException e) {
             e.printStackTrace();
         } catch (IllegalBlockSizeException e) {
@@ -56,7 +56,7 @@ public class Encrypt {
     }
 
 
-    private SecretKeySpec generateKey(String password) throws Exception {
+    public SecretKeySpec generateKey(String password) throws Exception {
 
             final MessageDigest digest=MessageDigest.getInstance("SHA-256");
 

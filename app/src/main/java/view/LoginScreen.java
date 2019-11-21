@@ -8,10 +8,13 @@ import Model.HiddenCameraUtils;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.provider.Settings;
 import android.text.TextUtils;
@@ -37,14 +40,21 @@ import com.google.android.material.snackbar.Snackbar;
 
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.security.Timestamp;
+import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class LoginScreen extends HiddenCameraActivity {
 
@@ -59,6 +69,8 @@ public class LoginScreen extends HiddenCameraActivity {
     private  int attempts = 3;
     private CameraConfig mCameraConfig;
 public static final String  AES="AES";
+
+    public static final View view = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,7 +136,24 @@ public static final String  AES="AES";
 
 
 
+    private static final Pattern[] inputRegexes = new Pattern[4];
 
+    static {
+        inputRegexes[0] = Pattern.compile(".*[A-Z].*");
+        inputRegexes[1] = Pattern.compile(".*[a-z].*");
+        inputRegexes[2] = Pattern.compile(".*\\d.*");
+        inputRegexes[3] = Pattern.compile(".*[`~!@#$%^&*()\\-_=+\\\\|\\[{\\]};:'\",<.>/?].*");
+    }
+
+    private static boolean isMatchingRegex(String input) {
+        boolean inputMatches = true;
+        for (Pattern inputRegex : inputRegexes) {
+            if (!inputRegex.matcher(input).matches()) {
+                inputMatches = false;
+            }
+        }
+        return inputMatches;
+    }
                                             /////Login//////////
 
     private void LogIn(View view) throws Exception {
@@ -139,10 +168,37 @@ public static final String  AES="AES";
 
        // final  String pass_value=encrypt.encrypt(email,pass);
 
+int username_value=email.length();
+        int pass_value=pass.length();
 
-        if(TextUtils.isEmpty(email) || TextUtils.isEmpty(pass)){
-            Toast.makeText(LoginScreen.this,"Input details on all fields",Toast.LENGTH_LONG).show();
-        }else {
+
+        if(TextUtils.isEmpty(email)  ){
+            Username.setError("Username required ");
+
+        }
+       else if ( username_value!=9)
+        {
+            Toast.makeText(LoginScreen.this,"not a valid phone number",Toast.LENGTH_LONG).show();
+
+        }
+        else if(TextUtils.isEmpty(pass)){
+            Password.setError("Password required ");
+
+        }
+       else  if ( pass_value<6)
+        {
+            Toast.makeText(LoginScreen.this,"password must be at least 6 characters",Toast.LENGTH_LONG).show();
+
+        }
+
+
+        else if (!isMatchingRegex(pass))
+        {
+            Toast.makeText(LoginScreen.this,"password must include alphabets,special characters,numbers",Toast.LENGTH_LONG).show();
+
+        }
+
+        else {
 
          check_login(view);
 
@@ -183,7 +239,7 @@ public static final String  AES="AES";
         options.inPreferredConfig = Bitmap.Config.RGB_565;
         Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
 
-        uploadimage(bitmap);
+        uploadimage(bitmap,view);
 
 
         ((ImageView) Image).setImageBitmap(bitmap);
@@ -263,13 +319,18 @@ public static final String  AES="AES";
 
     /////////Image to server
 
-    public  void uploadimage(final Bitmap bitmap)
+    public  void uploadimage(final Bitmap bitmap,final View view)
 
     {
+        final ProgressDialog progressDialog = ProgressDialog.show(LoginScreen.this, "Please wait...","Processing...",true);
 
-        String upload_image_url="https://project-daudi.000webhostapp.com/canary_camera/upload_image.php";
 
-       //  String upload_image_url="https://192.168.43.121/canary_camera/upload_image.php";
+          String upload_image_url="https://project-daudi.000webhostapp.com/canary_camera/upload_image.php";
+
+       //String upload_image_url="http://192.168.43.121/canary_camera/upload_image.php";
+       // String upload_image_url="https://localhost/canary_camera/upload_image.php";
+
+
         final StringRequest stringrequest = new StringRequest(com.android.volley.Request.Method.POST, upload_image_url,
                 new com.android.volley.Response.Listener<String>() {
                     @Override
@@ -277,14 +338,26 @@ public static final String  AES="AES";
 
                     public void onResponse(String response) {
                         try {
+                          //  progressDialog.dismiss();
                             Log.i("RESPONSE", response);
                             JSONObject json = new JSONObject(response);
-                            Toast.makeText(getBaseContext(), "The image is uploaded", Toast.LENGTH_LONG).show();
+                            String str=json.getString("response");
+                            if (str.equals("successful"))
+                            {  //Toast.makeText(getBaseContext(), "The image is uploaded", Toast.LENGTH_LONG).show();
+                                progressDialog.dismiss();
+                                finish();
+                            }
+
+
+
                         } catch (JSONException e) {
                             Log.d("JSON Exception", e.toString());
                             Toast.makeText(getBaseContext(),
                                     "Error while loading data!",
                                     Toast.LENGTH_LONG).show();
+                           progressDialog.dismiss();
+                           // finish();
+
                         }
 
                     }
@@ -292,12 +365,28 @@ public static final String  AES="AES";
             @Override
             public void onErrorResponse(VolleyError error) {
 
+                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                    snackbar("No connection",view);
+                    progressDialog.dismiss();
+                    //This indicates that the reuest has either time out or there is no connection
+                } else if (error instanceof AuthFailureError) {
+                    snackbar("No connection",view);
+                    progressDialog.dismiss();
+                } else if (error instanceof ServerError) {
+                    snackbar("No connection",view);
+                    progressDialog.dismiss();
+                } else if (error instanceof NetworkError) {
+                    snackbar("No connection",view);
+                    progressDialog.dismiss();                }
+                else if (error instanceof ParseError) {
+                    snackbar("No connection",view);
+                    progressDialog.dismiss();                }
 
 
                 Log.e("enda", error.toString());
 
 
-                Toast.makeText(LoginScreen.this, "nnnnnn"+error, Toast.LENGTH_LONG).show();
+              //  Toast.makeText(LoginScreen.this, "nnnnnn"+error, Toast.LENGTH_LONG).show();
 
             }
         })
@@ -315,17 +404,40 @@ public static final String  AES="AES";
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 30, baos);
                 byte[] imageBytes = baos.toByteArray();
-                String imagesd= Base64.encodeToString(imageBytes, Base64.DEFAULT);
+                String image_string= Base64.encodeToString(imageBytes, Base64.DEFAULT);
+
+                  final String name=   "+254"+Username.getText().toString();
+                  Date currentTime = Calendar.getInstance().getTime();
 
 
 
-                final String name = Username.getText().toString();
+                  SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z");
+                  String currentDateandTime = sdf.format(new Date());
+                  SimpleDateFormat time = new SimpleDateFormat(" HH:mm:ss ");
+                  SimpleDateFormat date = new SimpleDateFormat("dd.MM.yyyy");
+                  SimpleDateFormat currenttime = new SimpleDateFormat("HH.mm.ss_dd.MM.yyyy");
 
 
 
-                params.put("name", name);
+                 String current_date_time=currenttime.format(new Date());
+                  String current__time=time.format(new Date());
+                  String current_date=date.format(new Date());
 
-                params.put("image",imagesd );
+
+                  String image_url="https://project-daudi.000webhostapp.com/canary_camera/canary_camera/."+name+"."+current_date_time+".jpg";
+                String image_name=name+current_date_time;
+                  params.put("name",name);//the username that one will try to login with
+                  params.put("url","https://project-daudi.000webhostapp.com/canary_camera/canary_camera/");//url path to location of picture
+                params.put("image_url", image_url);
+                  params.put("date_now", current_date);
+                  params.put("time_now", current__time);
+                  params.put("date_time", current_date_time);
+
+                  params.put("image_name",image_name);
+
+
+
+                  params.put("image",image_string );
 
 
                 // return super.getParams();
@@ -342,67 +454,26 @@ public static final String  AES="AES";
 
     public void check_login(final View view)
     {
-        final ProgressDialog progressDialog =    ProgressDialog.show(LoginScreen.this, "Please wait...","Processing...",true);
+        final ProgressDialog progressDialog = ProgressDialog.show(LoginScreen.this, "Please wait...","Processing...",true);
 
-       // String login_url="http://192.168.43.121/canary_camera/login2.php";
+    // String login_url="http://192.168.43.121/canary_camera/login2.php";
 
-       String login_url="https://project-daudi.000webhostapp.com/canary_camera/login2.php";
+     String login_url="https://project-daudi.000webhostapp.com/canary_camera/login3.php";
         StringRequest stringRequest=new StringRequest(com.android.volley.Request.Method.POST, login_url, new com.android.volley.Response.Listener<String>() {
             @Override
-            public void onResponse(String response) {
+            public void onResponse(final String response) {
                 Log.i("Response", response.toString());
 
 
                 try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    String     login_response = jsonObject.getString("response");
 
-                    attempts --;
-
-                    {
-                        // checks whether the credentials are the right ones,i true hen the user is taken to another activity
-                        if (login_response.equals("successful")) {
-                            progressDialog.dismiss();
-
-                            Toast.makeText(getApplicationContext(), "access granted", Toast.LENGTH_SHORT).show();
-                            Intent welcome = new Intent(getApplicationContext(), Welcome.class);
-                            startActivity(welcome);
-                        } else {
-
-                            if (attempts < 3 && attempts != 0) {
-
-
-                                //bothe the username and password are false
-
-                                Toast.makeText(getApplicationContext(), "Wrong credentials.Try again", Toast.LENGTH_SHORT).show();
-
-                                progressDialog.dismiss();
-                            } else {
-
-                                //both the username and password are false
-
-                                // Toast.makeText(this, "Wrong credentials.Try again", Toast.LENGTH_SHORT).show();
-
-                                Toast.makeText(getApplicationContext(), "Authentication Failed!!", Toast.LENGTH_LONG).show();
-                                progressDialog.dismiss();
-                                takePicture();
-                              /*  new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-
-//                                        cannary();
-                                      //  finish();
-                                    }
-                                },timeOut);*/
-
-                            }
-
-                        }
+                    login_in_function(progressDialog,response);
+                   // login_function(progressDialog,response);
 
                     }
 
 
-                } catch (JSONException e) {
+                 catch (JSONException e) {
                     e.printStackTrace();
                  //   responses.equals(login_response);
                     Log.i("JSONEXCEPTION", e.toString());
@@ -420,20 +491,20 @@ public static final String  AES="AES";
 
 
                 if (error instanceof TimeoutError || error instanceof NoConnectionError) {
-                    snackbar(error.toString(),view);
+                    snackbar("No connection",view);
                        progressDialog.dismiss();
                     //This indicates that the reuest has either time out or there is no connection
                 } else if (error instanceof AuthFailureError) {
-                    snackbar(error.toString(),view);
+                    snackbar("No connection",view);
                     progressDialog.dismiss();
                 } else if (error instanceof ServerError) {
-                    snackbar(error.toString(),view);
+                    snackbar("No connection",view);
                     progressDialog.dismiss();
                 } else if (error instanceof NetworkError) {
-                    snackbar(error.toString(),view);
+                    snackbar("No connection",view);
                     progressDialog.dismiss();                }
                 else if (error instanceof ParseError) {
-                    snackbar(error.toString(),view);
+                    snackbar("No connection",view);
                     progressDialog.dismiss();                }
 
 
@@ -451,7 +522,7 @@ public static final String  AES="AES";
 
                 params.put("username","+254"+Username.getText().toString());
                 try {
-                    params.put("encrypted_password",encrypt.encrypt(Username.getText().toString(),Password.getText().toString()));
+                    params.put("encrypted_password",encrypt.encrypt(Password.getText().toString()));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -477,4 +548,133 @@ Snackbar mysnackbar=Snackbar.make(view,error,Snackbar.LENGTH_LONG);
 
 
 
+
+
+private  void login_in_function(final ProgressDialog progressDialog,String response) throws JSONException {
+   //  String status_userdata=jsonObjectt.getString("user_data");
+
+        JSONObject jsonObject_response = new JSONObject(response);
+
+    String responses=jsonObject_response.getString("response");
+
+
+
+if (responses.equals("wrong_pass"))
+    {
+        attempts--;
+        if (attempts < 3 && attempts != 0) {
+
+
+            //bothe the username and password are false
+
+            Toast.makeText(getApplicationContext(), "Wrong credentials.Try again", Toast.LENGTH_SHORT).show();
+
+            progressDialog.dismiss();
+        } else {
+
+            //both the username and password are false
+
+            // Toast.makeText(this, "Wrong credentials.Try again", Toast.LENGTH_SHORT).show();
+
+            // Toast.makeText(getApplicationContext(), "Authentication Failed!!", Toast.LENGTH_LONG).show();
+            progressDialog.dismiss();
+
+            takePicture();
+            cannary();
+        }
+
+
+    }
+    else if(responses.equals("!phone_number"))
+    {
+        Toast.makeText(this,"Wrong credentials.Enter the correct username",Toast.LENGTH_LONG).show();
+        progressDialog.dismiss();
+    }
+    else if (responses.equals("exists"))
+{
+    finish();
+}
+    else {
+        //////{"user_data":{"user_data":[{"firstname":"dausi","lastname":"mumo","email":"devimumo@gmail.com"}]},"session_id":"b1850067893af7e877b9d00e2a7adaa8"}
+        JSONObject jsonObject = new JSONObject(response);
+        String responsed = jsonObject.getString("response");
+        String session_id=jsonObject.getString("session_id");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        if (responsed.equals("successful"))   {
+
+
+            Toast.makeText(getApplicationContext(),"successful",Toast.LENGTH_LONG).show();
+            String MyPreferences="mypref";
+            SharedPreferences sharedPreferences=getSharedPreferences(MyPreferences, (Context.MODE_PRIVATE));
+           // String session_ide= sharedPreferences.getString("sessions_ids","");
+
+            SharedPreferences.Editor editor=sharedPreferences.edit();
+            // String phone_number_= phone_number.getText().toString().trim();
+            final String email = Username.getText().toString();
+
+             editor.remove("sessions_ids");
+            editor.remove("phone_number");
+
+        editor.putString("sessions_ids",session_id);
+            editor.putString("phone_number",email);
+
+            // editor.putString("phone_numbers",phone_number_);
+            editor.commit();
+
+
+get_data(response) ;
+            progressDialog.dismiss();
+        }
+        ///////
+    }
+
+
+
+
+
+    }
+
+
+
+private  void get_data(String response) throws JSONException
+{
+    JSONObject jsonObject = new JSONObject(response);
+
+    String user_data=jsonObject.getString("user_data");
+
+
+
+    JSONObject jjk=new JSONObject(user_data);
+    JSONArray jsonArray=jjk.getJSONArray("user_data");
+
+    for (int i = 0; i < jsonArray.length(); i++){
+
+        JSONObject tickets_object = jsonArray.getJSONObject(i);
+        String firstname=tickets_object.getString("firstname");
+        String lastname=tickets_object.getString("lastname");
+        String email_=tickets_object.getString("email");
+
+        Intent welcome=new Intent(LoginScreen.this,Welcome.class);
+String username=firstname+lastname;
+welcome.putExtra("name",username);
+        welcome.putExtra("email",email_);
+        startActivity(welcome);
+
+
+
+    }
+}
 }

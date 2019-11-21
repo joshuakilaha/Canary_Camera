@@ -1,6 +1,7 @@
 package view;
 
 import android.content.Intent;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -11,9 +12,14 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -25,6 +31,9 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TooManyListenersException;
+import java.util.regex.Pattern;
+
+import javax.crypto.spec.SecretKeySpec;
 
 public class SignUp extends AppCompatActivity {
 
@@ -55,6 +64,27 @@ progressbar=findViewById(R.id.progress);
     }
 
 
+
+    //methods to check characters in password
+    private static final Pattern[] inputRegexes = new Pattern[4];
+
+    static {
+        inputRegexes[0] = Pattern.compile(".*[A-Z].*");
+        inputRegexes[1] = Pattern.compile(".*[a-z].*");
+        inputRegexes[2] = Pattern.compile(".*\\d.*");
+        inputRegexes[3] = Pattern.compile(".*[`~!@#$%^&*()\\-_=+\\\\|\\[{\\]};:'\",<.>/?].*");
+    }
+
+    private static boolean isMatchingRegex(String input) {
+        boolean inputMatches = true;
+        for (Pattern inputRegex : inputRegexes) {
+            if (!inputRegex.matcher(input).matches()) {
+                inputMatches = false;
+            }
+        }
+        return inputMatches;
+    }
+
     public void  signup()
     {
 
@@ -75,45 +105,83 @@ signup.setVisibility(View.GONE);
         String Confirmpassword = confirmpassword.getText().toString();
 
 
+        int username_value=Mobile_no.length();
+        int pass_value=Password.length();
 
+if(FirstName.isEmpty() |  LastName.isEmpty())
+{
+    Toast.makeText(SignUp.this,"Names required",Toast.LENGTH_LONG).show();
+    progressbar.setVisibility(View.INVISIBLE);
+    signup.setVisibility(View.VISIBLE);
 
-        if (!FirstName.isEmpty() ||  !LastName.isEmpty() || !Email.isEmpty() || !Password.isEmpty()  || !Confirmpassword.isEmpty())
-        {
+}
+else if(Email.isEmpty())
+{
+    email.setError("email required");
+    progressbar.setVisibility(View.INVISIBLE);
+    signup.setVisibility(View.VISIBLE);
+}
 
-            if (Password.equals(Confirmpassword))
-            {
-                register(FirstName,LastName,Email,Mobile_no,Password);
+        else if(TextUtils.isEmpty(Mobile_no)  ){
+            mobile_no.setError("Phone number  required ");
+    progressbar.setVisibility(View.INVISIBLE);
+    signup.setVisibility(View.VISIBLE);
 
-            }
-            else
-            {
-                confirmpassword.setError("Psswords must match");
-                progressbar.setVisibility(View.INVISIBLE);
-                signup.setVisibility(View.VISIBLE);
-
-            }
         }
-//effected when edittext is empty
-        else
+        else if ( username_value!=9)
         {
-
-
-            firstName.setError("Username Required");
-
-            lastName.setError("lastname Required");
-            email.setError("Email Required");
-            mobile_no.setError("Mobileno required");
-            password.setError("Password Required");
-            confirmpassword.setError("Confirmpassword Required");
+            Toast.makeText(SignUp.this,"not a valid phone number",Toast.LENGTH_LONG).show();
             progressbar.setVisibility(View.INVISIBLE);
             signup.setVisibility(View.VISIBLE);
 
+        }
+else if(TextUtils.isEmpty(Password)){
+    password.setError("Password required ");
+    progressbar.setVisibility(View.INVISIBLE);
+    signup.setVisibility(View.VISIBLE);
 
-        }}
+}
+else  if ( pass_value<6)
+{
+    Toast.makeText(SignUp.this,"password must be at least 6 characters",Toast.LENGTH_LONG).show();
+    progressbar.setVisibility(View.INVISIBLE);
+    signup.setVisibility(View.VISIBLE);
+
+}
+
+
+else if (!isMatchingRegex(Password))
+{
+    Toast.makeText(SignUp.this,"password must include alphabets,special characters,numbers",Toast.LENGTH_LONG).show();
+    progressbar.setVisibility(View.INVISIBLE);
+    signup.setVisibility(View.VISIBLE);
+
+}
+        else if (!Password.equals(Confirmpassword))
+        {
+
+            confirmpassword.setError("Psswords must match");
+            progressbar.setVisibility(View.INVISIBLE);
+            signup.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            register(FirstName,LastName,Email,Mobile_no,Password);
+
+
+        }
+
+
+
+
+
+
+
+    }
     private  void  register(final String FirstName, final String LastName, final String Email, final String Mobile_no, final String Password )
     {
 
-     //   String url="http://192.168.43.121/canary_camera/register.php";
+      //  String url="http://192.168.43.121/canary_camera/register.php";
 
         String url="https://project-daudi.000webhostapp.com/canary_camera/register.php";
 
@@ -175,6 +243,9 @@ Log.i("Responsed",response.toString());
                 progressbar.setVisibility(View.INVISIBLE);
                 signup.setVisibility(View.VISIBLE);
 
+
+
+
             }
         }) {
 
@@ -186,13 +257,18 @@ Log.i("Responsed",response.toString());
 
 
                 Encrypt encrypt=new Encrypt();
+
+
                 params.put("firstname",FirstName);
 
                 params.put("lastname",LastName);
                 params.put("email",Email);
                 params.put("mobile_no","+254"+Mobile_no);
                 try {
-                    params.put("password",encrypt.encrypt(Mobile_no,Password));
+                    //SecretKeySpec keys=encrypt.generateKey(Password);
+                    //String key=keys.toString();
+                    params.put("password",encrypt.encrypt(Password));
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
