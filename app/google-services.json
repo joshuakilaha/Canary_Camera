@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "82894020514",
+    "firebase_url": "https://canary-camema.firebaseio.com",
+    "project_id": "canary-camema",
+    "storage_bucket": "canary-camema.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:82894020514:android:1c54553095b00773321cfb",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "82894020514-fvpbanhnvipigstrhsijbjfn4dmrnes3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvfgR8QV7GNd5Q-mrCXiG3Symhv8E65kk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "82894020514-fvpbanhnvipigstrhsijbjfn4dmrnes3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

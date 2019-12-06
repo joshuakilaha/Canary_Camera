@@ -21,8 +21,8 @@ class Welcome : AppCompatActivity() {
         setContentView(R.layout.activity_welcome)
         Card_click(View(this))
 
-val user__name: String=intent.getStringExtra("name")
-        val email: String=intent.getStringExtra("email")
+val user__name: String?=intent.getStringExtra("name")
+        val email: String?=intent.getStringExtra("email")
 user_name.text=user__name
 user_email.text=email
     }

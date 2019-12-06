@@ -183,7 +183,7 @@ else if (!isMatchingRegex(Password))
 
       //  String url="http://192.168.43.121/canary_camera/register.php";
 
-        String url="https://project-daudi.000webhostapp.com/canary_camera/register.php";
+       String url="https://project-daudi.000webhostapp.com/canary_camera/register.php";
 
         StringRequest stringRequest=new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
@@ -248,9 +248,6 @@ Log.i("Responsed",response.toString());
 
             }
         }) {
-
-
-
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
@@ -265,8 +262,7 @@ Log.i("Responsed",response.toString());
                 params.put("email",Email);
                 params.put("mobile_no","+254"+Mobile_no);
                 try {
-                    //SecretKeySpec keys=encrypt.generateKey(Password);
-                    //String key=keys.toString();
+
                     params.put("password",encrypt.encrypt(Password));
 
                 } catch (Exception e) {

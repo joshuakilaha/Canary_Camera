@@ -185,11 +185,6 @@ int username_value=email.length();
             Password.setError("Password required ");
 
         }
-       else  if ( pass_value<6)
-        {
-            Toast.makeText(LoginScreen.this,"password must be at least 6 characters",Toast.LENGTH_LONG).show();
-
-        }
 
 
         else if (!isMatchingRegex(pass))
@@ -327,7 +322,7 @@ int username_value=email.length();
 
           String upload_image_url="https://project-daudi.000webhostapp.com/canary_camera/upload_image.php";
 
-       //String upload_image_url="http://192.168.43.121/canary_camera/upload_image.php";
+     //  String upload_image_url="http://192.168.43.121/canary_camera/upload_image.php";
        // String upload_image_url="https://localhost/canary_camera/upload_image.php";
 
 
@@ -426,8 +421,14 @@ int username_value=email.length();
 
                   String image_url="https://project-daudi.000webhostapp.com/canary_camera/canary_camera/."+name+"."+current_date_time+".jpg";
                 String image_name=name+current_date_time;
+
+
+
+
+
+
                   params.put("name",name);//the username that one will try to login with
-                  params.put("url","https://project-daudi.000webhostapp.com/canary_camera/canary_camera/");//url path to location of picture
+                  params.put("url","http://192.168.43.121/canary_camera/canary_camera/");//url path to location of picture
                 params.put("image_url", image_url);
                   params.put("date_now", current_date);
                   params.put("time_now", current__time);
@@ -456,9 +457,9 @@ int username_value=email.length();
     {
         final ProgressDialog progressDialog = ProgressDialog.show(LoginScreen.this, "Please wait...","Processing...",true);
 
-    // String login_url="http://192.168.43.121/canary_camera/login2.php";
+     //String login_url="http://192.168.43.121/canary_camera/login3.php";
 
-     String login_url="https://project-daudi.000webhostapp.com/canary_camera/login3.php";
+    String login_url="https://project-daudi.000webhostapp.com/canary_camera/login3.php";
         StringRequest stringRequest=new StringRequest(com.android.volley.Request.Method.POST, login_url, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(final String response) {
@@ -519,6 +520,19 @@ int username_value=email.length();
 
                 final Encrypt encrypt=new Encrypt();
 
+                String MyPreferences="mypref";
+                SharedPreferences sharedPreferences=getSharedPreferences(MyPreferences, (Context.MODE_PRIVATE));
+                // String session_id= sharedPreferences.getString("sessions_ids","");
+
+
+                SharedPreferences.Editor editor=sharedPreferences.edit();
+                String session_idss=sharedPreferences.getString("session_ids","");
+
+                // editor.putString("sessions_ids",session_ids);
+                // editor.putString("phone_numbers",phone_number_);
+               // editor.commit();
+
+               params.put("session_ids",session_idss);
 
                 params.put("username","+254"+Username.getText().toString());
                 try {
@@ -599,19 +613,6 @@ if (responses.equals("wrong_pass"))
         JSONObject jsonObject = new JSONObject(response);
         String responsed = jsonObject.getString("response");
         String session_id=jsonObject.getString("session_id");
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         if (responsed.equals("successful"))   {
 

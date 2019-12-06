@@ -18,17 +18,24 @@ import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import com.example.myapplication.R
 import kotlinx.android.synthetic.main.activity_unauthorized_list.*
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.HashMap
+import android.view.LayoutInflater
+import androidx.core.app.ComponentActivity
+import androidx.core.app.ComponentActivity.ExtraData
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import android.R
+import android.widget.LinearLayout
+
 
 class Unauthorized_list : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_unauthorized_list)
+        setContentView(com.example.myapplication.R.layout.activity_unauthorized_list)
 
         recycler_view.layoutManager= LinearLayoutManager(parent)
 
@@ -38,6 +45,29 @@ class Unauthorized_list : AppCompatActivity() {
 
 
         loaddata(users_list);
+
+
+        val MyPreferences = "mypref"
+        val sharedPreferences = getSharedPreferences(MyPreferences, Context.MODE_PRIVATE)
+        // String session_ide= sharedPreferences.getString("sessions_ids","");
+
+        val editor: SharedPreferences.Editor = sharedPreferences.edit()
+
+        val session_id: String?=sharedPreferences.getString("sessions_ids","")
+        val phone_number:String?=sharedPreferences.getString("phone_number","")
+
+      //  Toast.makeText(applicationContext,session_id,Toast.LENGTH_LONG).show()
+
+
+
+
+
+
+
+
+
+
+
     }
 
     private fun loaddata( usersList: ArrayList<MyAccount_details>) {
@@ -51,15 +81,11 @@ class Unauthorized_list : AppCompatActivity() {
 
 
         val queue = Volley.newRequestQueue(this)
-        val url = "http://project-daudi.000webhostapp.com/canary_camera/check_anuthorized.php"
-        //val url = "http://192.168.43.121/canary_camera/check_anuthorized.php"
+        val url = "https://project-daudi.000webhostapp.com/canary_camera/check_unauthorized.php"
+       //val url = "http://192.168.43.121/canary_camera/check_anuthorized.php"
 
-//        val namess: String=intent.getStringExtra("name")
 
-    //    intent.putExtra("name",namess)
-        // val url = "http://192.168.43.121/recycler/check_tiko.php"
 
-        // Request a string response from the provided URL.
         val stringRequest=object :StringRequest(Request.Method.POST, url, Response.Listener { unauthorized_data ->
 Log.i("erraa",unauthorized_data)
 
@@ -74,7 +100,17 @@ Log.i("erraa",unauthorized_data)
 
 
                     if (response.equals("no_data")) {
+val layoutToAdd: LinearLayout?=findViewById(com.example.myapplication.R.id.child_linear);
+                        val inflater = LayoutInflater
+                                .from(this)
+                        val view = inflater.inflate(com.example.myapplication.R.layout.unauthorized_no_data, null)
+                        layoutToAdd?.addView(view)
+
+
+
                         Toast.makeText(applicationContext, "No data", Toast.LENGTH_SHORT).show()
+
+                       progressbar.dismiss()
                     }
                     else if (response.equals("session has expired.Login again"))
                     {
@@ -87,7 +123,7 @@ Toast.makeText(applicationContext,"Session expired,login again",Toast.LENGTH_SHO
 
                             val tickets_object = data_array.getJSONObject(i)
                             val tickets_dataaa = MyAccount_details(
-                                    tickets_object.getString("name"),
+                                    tickets_object.getString("timez"),
                                     tickets_object.getString("date"),
 
                                     tickets_object.getString("image_url")
@@ -99,6 +135,7 @@ Toast.makeText(applicationContext,"Session expired,login again",Toast.LENGTH_SHO
 
                         progressbar.dismiss()
                         val adap = MyAccount(usersList,applicationContext)
+                       adap.notifyDataSetChanged()
                         recycler_view.adapter = adap
                     }
 
@@ -132,24 +169,19 @@ Toast.makeText(applicationContext,"Session expired,login again",Toast.LENGTH_SHO
             val sharedPreferences = getSharedPreferences(MyPreferences, Context.MODE_PRIVATE)
             // String session_ide= sharedPreferences.getString("sessions_ids","");
 
-            val editor: SharedPreferences.Editor = sharedPreferences.edit()
+           // val editor: SharedPreferences.Editor = sharedPreferences.edit()
 
-         val session_id: String?=sharedPreferences.getString("sessions_ids","")
-            val phone_number:String?=sharedPreferences.getString("phone_number","")
+         val session_id: String= sharedPreferences.getString("sessions_ids","")!!
+            val phone_number:String= sharedPreferences.getString("phone_number","")!!
 
 
             @Throws(AuthFailureError::class)
             override fun getParams(): Map<String, String> {
                 val params = HashMap<String, String>()
 
+                params.put("session_id", session_id)
+                params.put("name", phone_number)
 
-                if (session_id != null) {
-                    params.put("session_id",session_id)
-                }
-
-                if (phone_number != null) {
-                    params.put("name",phone_number)
-                };
 
 
                 // return super.getParams();

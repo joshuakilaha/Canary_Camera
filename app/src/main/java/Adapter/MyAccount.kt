@@ -42,11 +42,11 @@ return  user_list.size   }
 val user_data: MyAccount_details=user_list[position]
 
 
-        val imag: ImageView= holder.itemview.imageV
+        val imag: ImageView= holder?.itemview.imageV
 
-    holder.itemview.name.text=user_data.name
+    holder?.itemview.name.text=user_data.name
 
-        holder.itemview.date.text=user_data.date
+        holder?.itemview.date.text=user_data.date
 
        // imag.setImageURI(user_data.image)
 
