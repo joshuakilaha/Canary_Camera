@@ -18,7 +18,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name="view.Unauthorized_list"></activity>
+        <activity android:name=".Mpesa_Deposit"></activity>
+        <activity android:name="view.Unauthorized_list" />
         <activity android:name="view.MyAccount" />
         <activity android:name="view.Welcome" />
         <activity android:name="view.SignUp" />
