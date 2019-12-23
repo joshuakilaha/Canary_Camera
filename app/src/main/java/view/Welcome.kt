@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
@@ -26,10 +27,22 @@ class Welcome : AppCompatActivity() {
 
     private lateinit var model: balance_viewmodel
 
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_welcome)
+        /////////////////////////
+        val displayMetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
+
+        var width = displayMetrics.widthPixels
+        var height = displayMetrics.heightPixels
+       ///////////////////////////
+
+
 
 model= ViewModelProviders.of(this).get(balance_viewmodel::class.java)
         //val bal: String="kshs. "+model.bala.toString()

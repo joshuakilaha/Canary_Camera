@@ -31,9 +31,20 @@ class Mpesa_Deposit : AppCompatActivity() {
 
         check_transaction_status()
         mpesa.setOnClickListener {
+            val ss=phonenumber_value.text
+val count=ss.count()
+if (phonenumber_value.text.isEmpty())
+{
+    phonenumber_value.setError("Phone number required")
+}
+            else if (count!=9)
+{
+    phonenumber_value.setError("wrong number format")
 
-
-            deposit_from_mpesa()
+}
+            else
+{            deposit_from_mpesa()
+}
         }
 
 
@@ -47,7 +58,7 @@ class Mpesa_Deposit : AppCompatActivity() {
         val progressbar: ProgressDialog = ProgressDialog(this)
         progressbar.setMessage("Loading..........")
         progressbar.setCancelable(false)
-      //  progressbar.show()
+        progressbar.show()
 
         val queue = Volley.newRequestQueue(this)
         val url = "http://project-daudi.000webhostapp.com/mpesa_daraja/lipa_online.php"
@@ -70,7 +81,7 @@ class Mpesa_Deposit : AppCompatActivity() {
                     startActivity(intent)
 
                 }
-                "transaction_in_progress" -> {
+                "invalid phonenumber,try again" -> {
                     Toast.makeText(this,"transaction in progress",Toast.LENGTH_SHORT).show()
                     progressbar.dismiss()
                     val intent= Intent(this, Mpesa_Deposit::class.java)
@@ -154,6 +165,29 @@ Log.i("ErrorListener",it.toString())
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT))
 
+    }
+
+
+    fun onRadioButtonClicked(view: View) {
+        if (view is RadioButton) {
+            // Is the button now checked?
+            val checked = view.isChecked
+
+            // Check which radio button was clicked
+            when (view.getId()) {
+                R.id.phonenumber_value ->
+                    if (checked) {
+                        Toast.makeText(this,"Already is checked",Toast.LENGTH_SHORT).show()
+                    }
+                else
+                    {phonenumber_value.setText(713836954.toString())
+                    }
+                R.id.deposit_amount ->
+                    if (checked) {
+Toast.makeText(this,"Already is checked",Toast.LENGTH_SHORT).show()                    }
+            }
+
+        }
     }
 
 fun check_transaction_status()
