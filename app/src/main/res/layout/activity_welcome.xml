@@ -32,10 +32,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
                 <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                app:srcCompat="@drawable/account_my" /></LinearLayout>
+                    android:id="@+id/imageView"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    app:srcCompat="@drawable/account_my" /></LinearLayout>
 
 
             <LinearLayout
@@ -44,13 +44,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent">
                 <TextView
-                android:id="@+id/user_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                    android:id="@+id/user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:textSize="16dp"
                     android:textColor="#ffffff"
-                android:layout_weight="1"
-                android:text="David mwanza" />
+                    android:layout_weight="1"
+                    android:text="David mwanza" />
 
                 <TextView
                     android:id="@+id/user_email"
@@ -78,28 +78,38 @@
     <LinearLayout
         android:id="@+id/cards"
 
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
+        android:gravity="center"
         android:orientation="vertical"
-
-
+        android:paddingLeft="17dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.68"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/card">
+        app:layout_constraintTop_toBottomOf="@+id/card"
+        app:layout_constraintWidth_percent="0.75">
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@id/card">
+            app:layout_constraintBottom_toBottomOf="@id/card"
+            app:layout_constraintStart_toStartOf="parent"
+
+            app:layout_constraintTop_toBottomOf="@+id/card"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"   >
 
 
             <GridLayout
 
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_gravity="center_horizontal"
                 android:columnCount="2"
-                android:paddingLeft="40dp">
+
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"          >
 
 
                 <androidx.cardview.widget.CardView
@@ -118,31 +128,29 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
-                        android:weightSum="4"
-                        android:orientation="vertical">
-
+                        android:orientation="vertical"
+                        android:weightSum="4">
 
 
                         <ImageView
-                            android:paddingTop="10dp"
                             android:layout_width="100dp"
                             android:layout_height="0dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/balance_sheet"
-                            android:layout_weight="3"/>
+                            android:layout_weight="3"
+                            android:paddingTop="10dp"
+                            android:src="@drawable/balance_sheet" />
 
                         <TextView
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:textStyle="bold"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
-                            android:textColor="#000000"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="center"
                             android:text=" Transactions"
-                            android:layout_weight="1"/>
+                            android:textColor="#000000"
+                            android:textStyle="bold" />
 
                     </LinearLayout>
-
 
 
                 </androidx.cardview.widget.CardView>
@@ -161,29 +169,29 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
-                        android:weightSum="4"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:weightSum="4">
 
 
                         <ImageView
-                            android:paddingTop="10dp"
-
                             android:layout_width="100dp"
+
                             android:layout_height="0dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/mpesh"
-                            android:layout_weight="3"/>
+                            android:layout_weight="3"
+                            android:paddingTop="10dp"
+                            android:src="@drawable/mpesh" />
 
                         <TextView
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:textStyle="bold"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
-                            android:textColor="#000000"
-
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="center"
                             android:text=" Mpesa"
-                            android:layout_weight="1"/>
+
+                            android:textColor="#000000"
+                            android:textStyle="bold" />
 
                     </LinearLayout>
 
@@ -205,31 +213,29 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
-                        android:weightSum="4"
-                        android:orientation="vertical">
-
+                        android:orientation="vertical"
+                        android:weightSum="4">
 
 
                         <ImageView
-                            android:paddingTop="10dp"
                             android:layout_width="100dp"
                             android:layout_height="0dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/transaction"
-                            android:layout_weight="3"/>
+                            android:layout_weight="3"
+                            android:paddingTop="10dp"
+                            android:src="@drawable/transaction" />
 
                         <TextView
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:textStyle="bold"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
-                            android:textColor="#000000"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="center"
                             android:text=" Loans"
-                            android:layout_weight="1"/>
+                            android:textColor="#000000"
+                            android:textStyle="bold" />
 
                     </LinearLayout>
-
 
 
                 </androidx.cardview.widget.CardView>
@@ -247,32 +253,30 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
-                        android:weightSum="4"
-                        android:orientation="vertical">
-
+                        android:orientation="vertical"
+                        android:weightSum="4">
 
 
                         <ImageView
-                            android:paddingTop="10dp"
                             android:layout_width="100dp"
                             android:layout_height="0dp"
-
                             android:layout_gravity="center"
-                            android:src="@drawable/loan"
-                            android:layout_weight="3"/>
+
+                            android:layout_weight="3"
+                            android:paddingTop="10dp"
+                            android:src="@drawable/loan" />
 
                         <TextView
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:textStyle="bold"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
-                            android:textColor="#000000"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="center"
                             android:text=" Withdraw"
-                            android:layout_weight="1"/>
+                            android:textColor="#000000"
+                            android:textStyle="bold" />
 
                     </LinearLayout>
-
 
 
                 </androidx.cardview.widget.CardView>
@@ -293,29 +297,28 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
-                        android:weightSum="4"
-                        android:orientation="vertical">
-
+                        android:orientation="vertical"
+                        android:weightSum="4">
 
 
                         <ImageView
-                            android:paddingTop="10dp"
                             android:layout_width="100dp"
                             android:layout_height="0dp"
-
                             android:layout_gravity="center"
-                            android:src="@drawable/wallet"
-                            android:layout_weight="3"/>
+
+                            android:layout_weight="3"
+                            android:paddingTop="10dp"
+                            android:src="@drawable/wallet" />
 
                         <TextView
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:textStyle="bold"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
-                            android:textColor="#000000"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="center"
                             android:text=" Balance"
-                            android:layout_weight="1"/>
+                            android:textColor="#000000"
+                            android:textStyle="bold" />
 
                     </LinearLayout>
 
@@ -336,29 +339,28 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
-                        android:weightSum="4"
-                        android:orientation="vertical">
-
+                        android:orientation="vertical"
+                        android:weightSum="4">
 
 
                         <ImageView
-                            android:paddingTop="10dp"
                             android:layout_width="100dp"
                             android:layout_height="0dp"
-
                             android:layout_gravity="center"
-                            android:src="@drawable/account_my"
-                            android:layout_weight="3"/>
+
+                            android:layout_weight="3"
+                            android:paddingTop="10dp"
+                            android:src="@drawable/account_my" />
 
                         <TextView
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:textStyle="bold"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
-                            android:textColor="#000000"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="center"
                             android:text="My account"
-                            android:layout_weight="1"/>
+                            android:textColor="#000000"
+                            android:textStyle="bold" />
 
                     </LinearLayout>
 
